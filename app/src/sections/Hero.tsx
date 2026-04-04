@@ -7,9 +7,11 @@ import {
   Mail,
   MessageCircle,
   ArrowUpRight,
+  Bot,
+  Workflow,
+  Zap,
+  Cpu,
 } from "lucide-react";
-
-
 
 const AnimatedGrid = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -118,33 +120,54 @@ const AnimatedGrid = () => {
   );
 };
 
-const StatCard = ({
-  value,
-  label,
-  delay,
-}: {
-  value: string;
-  label: string;
-  delay: number;
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
+// Animated text component with typewriter effect
+const AnimatedTitle = () => {
+  const [text, setText] = useState("");
+  const fullText = "Muzammil Abbas";
+  const [showSubtitle, setShowSubtitle] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), delay);
-    return () => clearTimeout(timer);
-  }, [delay]);
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index <= fullText.length) {
+        setText(fullText.slice(0, index));
+        index++;
+      } else {
+        clearInterval(timer);
+        setTimeout(() => setShowSubtitle(true), 300);
+      }
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <div
-      className={`rounded-2xl border border-white/10 bg-black/30 backdrop-blur-xl p-6 text-center transition-all duration-700 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-      }`}
-    >
-      <div className="text-3xl md:text-4xl font-bold text-cyan mb-2">
-        {value}
-      </div>
-      <div className="text-xs tracking-widest text-muted-foreground uppercase">
-        {label}
+    <div className="relative">
+      <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight min-h-[1.2em]">
+        <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-300 bg-clip-text text-transparent">
+          {text}
+        </span>
+        <span className="animate-pulse text-cyan-400">|</span>
+      </h1>
+      
+      {/* Floating badges that appear after name */}
+      <div className={`flex flex-wrap justify-center gap-3 transition-all duration-700 ${showSubtitle ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <div className="group flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/30 bg-cyan/5 backdrop-blur-sm hover:bg-cyan/10 hover:border-cyan/50 transition-all duration-300 hover:scale-105">
+          <Bot className="w-4 h-4 text-cyan" />
+          <span className="text-xs font-medium text-cyan/90">n8n Automation</span>
+        </div>
+        <div className="group flex items-center gap-2 px-4 py-2 rounded-full border border-purple/30 bg-purple/5 backdrop-blur-sm hover:bg-purple/10 hover:border-purple/50 transition-all duration-300 hover:scale-105">
+          <Workflow className="w-4 h-4 text-purple-400" />
+          <span className="text-xs font-medium text-purple-300">Agentic AI</span>
+        </div>
+        <div className="group flex items-center gap-2 px-4 py-2 rounded-full border border-emerald/30 bg-emerald/5 backdrop-blur-sm hover:bg-emerald/10 hover:border-emerald/50 transition-all duration-300 hover:scale-105">
+          <Zap className="w-4 h-4 text-emerald-400" />
+          <span className="text-xs font-medium text-emerald-300">Workflow Specialist</span>
+        </div>
+        <div className="group flex items-center gap-2 px-4 py-2 rounded-full border border-orange/30 bg-orange/5 backdrop-blur-sm hover:bg-orange/10 hover:border-orange/50 transition-all duration-300 hover:scale-105">
+          <Cpu className="w-4 h-4 text-orange-400" />
+          <span className="text-xs font-medium text-orange-300">Frontend Developer</span>
+        </div>
       </div>
     </div>
   );
@@ -160,162 +183,140 @@ const Hero = () => {
     <section className="relative min-h-screen overflow-hidden bg-black flex items-center">
       <AnimatedGrid />
 
-      {/* Glow background like picture */}
+      {/* Glow background */}
       <div className="absolute inset-0 z-[1] pointer-events-none">
-        <div className="absolute -left-40 top-0 h-[600px] w-[600px] rounded-full bg-cyan/20 blur-[120px]" />
-        <div className="absolute -right-40 bottom-0 h-[600px] w-[600px] rounded-full bg-purple-500/20 blur-[120px]" />
+        <div className="absolute -left-40 top-0 h-[600px] w-[600px] rounded-full bg-cyan/20 blur-[120px] animate-pulse" />
+        <div className="absolute -right-40 bottom-0 h-[600px] w-[600px] rounded-full bg-purple-500/20 blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[800px] w-[800px] rounded-full bg-blue-500/10 blur-[150px]" />
       </div>
 
       {/* Main Layout */}
       <div className="relative z-10 w-full px-6 lg:px-12">
         <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 
-         {/* LEFT SOCIAL LINKS (COLUMN, SEPARATE CARDS) */}
-<div className="hidden lg:flex lg:col-span-3 flex-col gap-4">
-  
-  {/* GitHub */}
-  <a
-    href="https://github.com/Muzammil-Abbas1"
-    target="_blank"
-    rel="noreferrer"
-    className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-cyan-400/10 hover:shadow-[0_0_35px_rgba(0,212,255,0.15)]"
-  >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-cyan-300 group-hover:border-cyan-400/30 group-hover:bg-cyan-400/10 transition">
-          <Github className="w-5 h-5" />
-        </div>
+          {/* LEFT SOCIAL LINKS */}
+          <div className="hidden lg:flex lg:col-span-3 flex-col gap-4">
+            
+            {/* GitHub */}
+            <a
+              href="https://github.com/Muzammil-Abbas1"
+              target="_blank"
+              rel="noreferrer"
+              className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-cyan-400/10 hover:shadow-[0_0_35px_rgba(0,212,255,0.15)]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-cyan-300 group-hover:border-cyan-400/30 group-hover:bg-cyan-400/10 transition">
+                    <Github className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white/85">GitHub</p>
+                    <p className="text-xs text-white/40">Open my repositories</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-cyan-300 transition" />
+              </div>
+            </a>
 
-        <div>
-          <p className="text-sm font-semibold text-white/85">GitHub</p>
-          <p className="text-xs text-white/40">Open my repositories</p>
-        </div>
-      </div>
+            {/* LinkedIn */}
+            <a
+              href="https://linkedin.com/in/yourusername"
+              target="_blank"
+              rel="noreferrer"
+              className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/30 hover:bg-purple-500/10 hover:shadow-[0_0_35px_rgba(168,85,247,0.15)]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-purple-300 group-hover:border-purple-400/30 group-hover:bg-purple-500/10 transition">
+                    <Linkedin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white/85">LinkedIn</p>
+                    <p className="text-xs text-white/40">Professional profile</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-purple-300 transition" />
+              </div>
+            </a>
 
-      <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-cyan-300 transition" />
-    </div>
-  </a>
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/923118911228"
+              target="_blank"
+              rel="noreferrer"
+              className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-400/30 hover:bg-emerald-500/10 hover:shadow-[0_0_35px_rgba(16,185,129,0.15)]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-emerald-300 group-hover:border-emerald-400/30 group-hover:bg-emerald-500/10 transition">
+                    <MessageCircle className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white/85">WhatsApp</p>
+                    <p className="text-xs text-white/40">Fastest way to reach me</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-emerald-300 transition" />
+              </div>
+            </a>
 
-  {/* LinkedIn */}
-  <a
-    href="https://linkedin.com/in/yourusername"
-    target="_blank"
-    rel="noreferrer"
-    className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/30 hover:bg-purple-500/10 hover:shadow-[0_0_35px_rgba(168,85,247,0.15)]"
-  >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-purple-300 group-hover:border-purple-400/30 group-hover:bg-purple-500/10 transition">
-          <Linkedin className="w-5 h-5" />
-        </div>
+            {/* Upwork */}
+            <a
+              href="https://www.upwork.com/freelancers/~01d8a382d9eac1d30c"
+              target="_blank"
+              rel="noreferrer"
+              className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-lime-400/30 hover:bg-lime-500/10 hover:shadow-[0_0_35px_rgba(132,204,22,0.15)]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-lime-300 group-hover:border-lime-400/30 group-hover:bg-lime-500/10 transition font-bold">
+                    U
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white/85">Upwork</p>
+                    <p className="text-xs text-white/40">Hire me for projects</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-lime-300 transition" />
+              </div>
+            </a>
 
-        <div>
-          <p className="text-sm font-semibold text-white/85">LinkedIn</p>
-          <p className="text-xs text-white/40">Professional profile</p>
-        </div>
-      </div>
-
-      <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-purple-300 transition" />
-    </div>
-  </a>
-
-  {/* WhatsApp */}
-  <a
-    href="https://wa.me/923118911228"
-    target="_blank"
-    rel="noreferrer"
-    className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-400/30 hover:bg-emerald-500/10 hover:shadow-[0_0_35px_rgba(16,185,129,0.15)]"
-  >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-emerald-300 group-hover:border-emerald-400/30 group-hover:bg-emerald-500/10 transition">
-          <MessageCircle className="w-5 h-5" />
-        </div>
-
-        <div>
-          <p className="text-sm font-semibold text-white/85">WhatsApp</p>
-          <p className="text-xs text-white/40">Fastest way to reach me</p>
-        </div>
-      </div>
-
-      <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-emerald-300 transition" />
-    </div>
-  </a>
-
-  {/* Upwork */}
-  <a
-    href="https://www.upwork.com/freelancers/~01d8a382d9eac1d30c"
-    target="_blank"
-    rel="noreferrer"
-    className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-lime-400/30 hover:bg-lime-500/10 hover:shadow-[0_0_35px_rgba(132,204,22,0.15)]"
-  >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        {/* Upwork icon replacement */}
-        <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-lime-300 group-hover:border-lime-400/30 group-hover:bg-lime-500/10 transition font-bold">
-          U
-        </div>
-
-        <div>
-          <p className="text-sm font-semibold text-white/85">Upwork</p>
-          <p className="text-xs text-white/40">Hire me for projects</p>
-        </div>
-      </div>
-
-      <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-lime-300 transition" />
-    </div>
-  </a>
-
-  {/* Email */}
-  <a
-    href="mailto:210muzammilabbas@gmail.com"
-    className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-white/5 hover:shadow-[0_0_35px_rgba(255,255,255,0.08)]"
-  >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-white group-hover:border-white/20 group-hover:bg-white/10 transition">
-          <Mail className="w-5 h-5" />
-        </div>
-
-        <div>
-          <p className="text-sm font-semibold text-white/85">Email</p>
-          <p className="text-xs text-white/40">Send me a message</p>
-        </div>
-      </div>
-
-      <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-white transition" />
-    </div>
-  </a>
-</div>
-
+            {/* Email */}
+            <a
+              href="mailto:210muzammilabbas@gmail.com"
+              className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-white/5 hover:shadow-[0_0_35px_rgba(255,255,255,0.08)]"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-11 w-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/70 group-hover:text-white group-hover:border-white/20 group-hover:bg-white/10 transition">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white/85">Email</p>
+                    <p className="text-xs text-white/40">Send me a message</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-white/30 group-hover:text-white transition" />
+              </div>
+            </a>
+          </div>
 
           {/* CENTER CONTENT */}
           <div className="lg:col-span-6 text-center">
-            {/* Available pill */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-xs tracking-widest uppercase mb-6">
-              <span className="h-2 w-2 rounded-full bg-cyan" />
+            {/* Available pill with animation */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-xs tracking-widest uppercase mb-8 animate-pulse">
+              <span className="h-2 w-2 rounded-full bg-cyan animate-ping" />
               Available for new projects
             </div>
 
-            
+            <AnimatedTitle />
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-300 bg-clip-text text-transparent">
-                Muzammil Abbas
-              </span>
-              
-            </h1>
-
-            <p className="text-cyan text-sm sm:text-base tracking-[0.35em] uppercase mb-6 ">
-              AI/ML Enthusiast  |  Frontend Developer
-            </p>
-
-            <p className="text-white/60 max-w-2xl mx-auto mb-10 text-base sm:text-lg">
-              Architecting the next generation of{" "}
-              <span className="text-white/80 font-semibold">
-                intelligent systems
-              </span>
-              . Focused on building AI-powered applications and modern, high-performance web apps.
+            <p className="text-white/60 max-w-2xl mx-auto mb-10 text-base sm:text-lg mt-8">
+              Building intelligent automation workflows with{" "}
+              <span className="text-cyan font-semibold">n8n</span>,{" "}
+              <span className="text-purple-300 font-semibold">Agentic AI</span>, and{" "}
+              <span className="text-emerald-300 font-semibold">modern web technologies</span>.
+              Transforming complex processes into seamless automated experiences.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
@@ -336,46 +337,44 @@ const Hero = () => {
                 VIEW MY WORK
               </Button>
             </div>
-
-            {/* Stats like picture */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 ">
-                <StatCard value="2+" label="Years Learning & Building" delay={1200} />
-                <StatCard value="15+" label="Projects Completed" delay={1400} />
-                <StatCard value="10+" label="Web Apps Built" delay={1600} />
-                <StatCard value="30k+" label="Lines of Code" delay={1800} />
-           </div>
-
           </div>
 
           {/* RIGHT PROFILE */}
           <div className="hidden lg:flex lg:col-span-3 justify-center">
             <div className="relative">
               {/* Status badge */}
-              <div className="absolute -top-6 -left-6 z-10 rounded-xl border border-white/10 bg-black/60 backdrop-blur-xl px-4 py-2">
+              <div className="absolute -top-6 -left-6 z-10 rounded-xl border border-white/10 bg-black/60 backdrop-blur-xl px-4 py-2 animate-bounce" style={{ animationDuration: '3s' }}>
                 <p className="text-[10px] tracking-widest uppercase text-white/50">
                   Status
                 </p>
                 <p className="text-xs font-semibold text-white/80 flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-cyan" />
+                  <span className="h-2 w-2 rounded-full bg-cyan animate-pulse" />
                   Active
                 </p>
               </div>
 
-              {/* Ring */}
-              <div className="h-64 w-64 rounded-full p-[3px] bg-gradient-to-r from-cyan-400 to-purple-500 shadow-[0_0_60px_rgba(168,85,247,0.25)]">
-                <div className="h-full w-full rounded-full bg-black/60 backdrop-blur-xl flex items-center justify-center overflow-hidden">
-                  {/* Replace with your image */}
+              {/* Ring with rotating gradient */}
+              <div className="relative h-64 w-64">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-spin" style={{ animationDuration: '8s' }} />
+                <div className="absolute inset-[3px] rounded-full bg-black/60 backdrop-blur-xl flex items-center justify-center overflow-hidden">
                   <img
-                      src="images/my1.png"
-                      alt="Muzammil Abbas"
-                     className="h-56 w-56 rounded-full object-cover"
-                     />
-
+                    src="images/my1.png"
+                    alt="Muzammil Abbas"
+                    className="h-56 w-56 rounded-full object-cover"
+                  />
                 </div>
               </div>
 
               {/* Outer subtle ring */}
               <div className="absolute inset-0 rounded-full border border-white/10 blur-[0.2px]" />
+              
+              {/* Orbiting dots */}
+              <div className="absolute inset-0 animate-spin" style={{ animationDuration: '15s' }}>
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-cyan shadow-[0_0_10px_rgba(0,212,255,0.8)]" />
+              </div>
+              <div className="absolute inset-0 animate-spin" style={{ animationDuration: '20s', animationDirection: 'reverse' }}>
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.8)]" />
+              </div>
             </div>
           </div>
         </div>

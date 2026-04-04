@@ -1,4 +1,5 @@
 import Hero from './sections/Hero';
+import StatsSection from './sections/StatsSection';
 import CodeQuality from './sections/CodeQuality';
 import Skills from './sections/Skills';
 import TechStack from './sections/TechStack';
@@ -21,6 +22,7 @@ function App() {
       
       <main>
         <Hero />
+        <StatsSection />
         <CodeQuality />
         <Skills />
         <TechStack />
