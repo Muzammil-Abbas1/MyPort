@@ -145,11 +145,11 @@ const Chatbot = () => {
         )}
       </Button>
 
-      {/* Chat Window */}
+      {/* Chat Window - FIXED POSITIONING */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 bg-card border border-border rounded-2xl shadow-2xl overflow-hidden animate-scale-in">
+        <div className="fixed bottom-20 right-6 z-50 w-80 sm:w-96 max-h-[70vh] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col">
           {/* Header */}
-          <div className="bg-gradient-to-r from-cyan to-purple p-4">
+          <div className="bg-gradient-to-r from-cyan to-purple p-4 flex-shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                 <Bot className="w-6 h-6 text-white" />
@@ -164,7 +164,7 @@ const Chatbot = () => {
           </div>
 
           {/* Messages */}
-          <div className="h-80 overflow-y-auto p-4 space-y-4 bg-background">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-background min-h-0">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -216,7 +216,7 @@ const Chatbot = () => {
           </div>
 
           {/* Quick Replies */}
-          <div className="px-4 py-2 bg-background border-t border-border">
+          <div className="px-4 py-2 bg-background border-t border-border flex-shrink-0">
             <div className="flex flex-wrap gap-2">
               {quickReplies.map((reply) => (
                 <button
@@ -234,7 +234,7 @@ const Chatbot = () => {
           </div>
 
           {/* Input */}
-          <div className="p-4 bg-card border-t border-border">
+          <div className="p-4 bg-card border-t border-border flex-shrink-0">
             <div className="flex gap-2">
               <Input
                 ref={inputRef}
