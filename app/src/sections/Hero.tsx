@@ -312,14 +312,15 @@ const Hero = () => {
 
             <AnimatedTitle />
 
-            <p className="text-white/60 max-w-2xl mx-auto mb-10 text-base sm:text-lg mt-8">
+            <p className="text-white/60 max-w-2xl mx-auto mb-10 text-base sm:text-lg mt-8 text-center text-balance leading-relaxed">
               Full-stack developer building robust REST APIs with{" "}
-              <span className="text-cyan font-semibold">Java &amp; Spring Boot</span>, scalable
-              systems with <span className="text-purple-300 font-semibold">MySQL</span>, and
-              intelligent automation with{" "}
-              <span className="text-emerald-300 font-semibold">n8n &amp; Agentic AI</span>. I turn
-              complex business logic into fast, reliable, end-to-end products — backend to
-              frontend.
+              <span className="text-cyan font-semibold whitespace-nowrap">Java &amp; Spring Boot</span>,
+              scalable systems with{" "}
+              <span className="text-purple-300 font-semibold">MySQL</span>, and intelligent
+              automation with{" "}
+              <span className="text-emerald-300 font-semibold whitespace-nowrap">n8n &amp; Agentic AI</span>.
+              I turn complex business logic into fast, reliable,{" "}
+              <span className="whitespace-nowrap">end-to-end</span> products — backend to frontend.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
