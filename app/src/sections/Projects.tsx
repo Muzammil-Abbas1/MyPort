@@ -97,7 +97,7 @@ const projects: Project[] = [
       "Designed and built a fast React + TypeScript site with smooth animations, service pages, and direct WhatsApp/booking CTAs",
     results:
       "Live production site with a professional brand feel, improved credibility, and a clear path from visit to booking",
-    image: "/images/project-skin-atelier.png",
+    image: "/images/skin.png",
     tech: ["React", "TypeScript", "Vite", "Tailwind CSS"],
     liveDemo: "https://skin-atelier-website.vercel.app",
     github: "https://github.com/Muzammil-Abbas1/skin-atelier-website",
@@ -114,7 +114,7 @@ const projects: Project[] = [
       "Built a Spring Boot + Spring Security backend (JWT, httpOnly cookies, CSRF protection, MySQL) with a React frontend for paginated CRUD contact management",
     results:
       "Secure register/login flow, fast contact search and editing, and a tested backend (JUnit/Mockito) verified with SonarQube",
-    image: "/images/project-contact-manager.png",
+    image: "/images/CMS.png",
     tech: ["Java", "Spring Boot", "Spring Security", "MySQL", "React", "JWT"],
     github: "https://github.com/Muzammil-Abbas1/cohort-9-java-14058-muhammad",
   },
