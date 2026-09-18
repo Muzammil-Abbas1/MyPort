@@ -144,7 +144,7 @@ const AnimatedTitle = () => {
 
   return (
     <div className="relative">
-      <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight min-h-[1.2em]">
+      <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight min-h-[1.2em] lg:whitespace-nowrap">
         <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-300 bg-clip-text text-transparent">
           {text}
         </span>
