@@ -8,9 +8,13 @@ interface Skill {
 
 const skills: Skill[] = [
   { name: 'Python & ML/AI', percentage: 75, icon: '🐍' },
-  { name: 'JavaScript', percentage: 75, icon: '⚛️' },
+  { name: 'JavaScript', percentage: 75, icon: '🟨' },
+  { name: 'React.js', percentage: 80, icon: '⚛️' },
   { name: 'HTML & CSS', percentage: 85, icon: '🎨' },
+  { name: 'Java & Spring Boot', percentage: 85, icon: '☕' },
+  { name: 'MySQL & REST APIs', percentage: 80, icon: '🗄️' },
   { name: 'Flask & Backend', percentage: 70, icon: '🔧' },
+  { name: 'n8n & Agentic AI', percentage: 85, icon: '⚡' },
   { name: 'TensorFlow & NLP', percentage: 75, icon: '🧠' },
   { name: 'Git & DevOps', percentage: 80, icon: '🚀' },
 ];
