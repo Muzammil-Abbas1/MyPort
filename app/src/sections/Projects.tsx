@@ -85,6 +85,39 @@ const projects: Project[] = [
     liveDemo: "#",
     github: "#",
   },
+
+  // ✅ NEW #4: Skin Atelier clinic website
+  {
+    id: "skin-atelier",
+    title: "Skin Atelier — Clinic Website",
+    tagline: "Elegant booking website for a premium dermatology & aesthetics clinic",
+    problem:
+      "The clinic needed a polished, trustworthy web presence that converts visitors into booked appointments",
+    solution:
+      "Designed and built a fast React + TypeScript site with smooth animations, service pages, and direct WhatsApp/booking CTAs",
+    results:
+      "Live production site with a professional brand feel, improved credibility, and a clear path from visit to booking",
+    image: "/images/project-skin-atelier.png",
+    tech: ["React", "TypeScript", "Vite", "Tailwind CSS"],
+    liveDemo: "https://skin-atelier-website.vercel.app",
+    github: "https://github.com/Muzammil-Abbas1/skin-atelier-website",
+  },
+
+  // ✅ NEW #5: Contact Management System
+  {
+    id: "contact-manager",
+    title: "Contact Management System",
+    tagline: "Full-stack contact manager with secure authentication",
+    problem:
+      "Users need a secure, reliable way to store and manage personal contacts with proper access control",
+    solution:
+      "Built a Spring Boot + Spring Security backend (JWT, httpOnly cookies, CSRF protection, MySQL) with a React frontend for paginated CRUD contact management",
+    results:
+      "Secure register/login flow, fast contact search and editing, and a tested backend (JUnit/Mockito) verified with SonarQube",
+    image: "/images/project-contact-manager.png",
+    tech: ["Java", "Spring Boot", "Spring Security", "MySQL", "React", "JWT"],
+    github: "https://github.com/Muzammil-Abbas1/cohort-9-java-14058-muhammad",
+  },
 ];
 
 const openLink = (url?: string) => {
@@ -118,13 +151,28 @@ const ProjectCard = ({
         </div>
 
         {/* Image */}
-        <div className="relative h-56 overflow-hidden">
+        <div className="relative h-56 overflow-hidden bg-gradient-to-br from-bg-tertiary to-black">
           <img
             src={project.image}
             alt={project.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+              e.currentTarget.parentElement
+                ?.querySelector(".image-fallback")
+                ?.classList.remove("hidden");
+            }}
           />
+          <div className="image-fallback hidden absolute inset-0 flex items-center justify-center">
+            <span className="text-4xl font-black tracking-tight text-white/15 select-none">
+              {project.title
+                .split(" ")
+                .map((w) => w[0])
+                .slice(0, 2)
+                .join("")}
+            </span>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
         </div>
 
