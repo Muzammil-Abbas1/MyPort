@@ -2,31 +2,14 @@ import type { CSSProperties } from "react";
 import SectionHeader from "@/components/SectionHeader";
 import { useScrollStage } from "@/hooks/useScrollStage";
 import type { Fly } from "@/hooks/useScrollStage";
-import {
-  GraduationCap,
-  Briefcase,
-  MapPin,
-  House,
-  Languages,
-  Goal,
-  ArrowUpRight,
-  Sparkles,
-} from "lucide-react";
-
-const facts = [
-  { icon: MapPin, label: "Hometown", value: "Skardu, Gilgit-Baltistan", color: "#00d4ff" },
-  { icon: House, label: "Based in", value: "Islamabad, Pakistan", color: "#a855f7" },
-  { icon: Languages, label: "Languages", value: "Urdu · English · Balti", color: "#10b981" },
-  { icon: Goal, label: "Off the keyboard", value: "Football", color: "#f59e0b" },
-];
+import { GraduationCap, Briefcase, ArrowUpRight, Sparkles } from "lucide-react";
 
 // Cards assemble from depth in this order as the pinned section is scrolled.
 const flies: Fly[] = [
   { start: 0.0, end: 0.4, x: -170, z: -340, ry: 26 }, // portrait
   { start: 0.1, end: 0.5, x: 170, z: -280, ry: -22 }, // background
-  { start: 0.25, end: 0.62, y: 90, z: -300, rx: -16 }, // facts
-  { start: 0.38, end: 0.72, y: 100, z: -260, rx: -14 }, // education
-  { start: 0.48, end: 0.82, y: 100, z: -260, rx: -14 }, // status
+  { start: 0.3, end: 0.68, y: 100, z: -260, rx: -14 }, // education
+  { start: 0.42, end: 0.8, y: 100, z: -260, rx: -14 }, // status
 ];
 
 const About = () => {
@@ -71,16 +54,6 @@ const About = () => {
                     alt="Muzammil Abbas"
                     className="absolute inset-0 h-full w-full object-cover object-[50%_18%]"
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-
-                  <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
-                    <span className="flex items-center gap-1.5 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
-                      <GraduationCap className="h-3.5 w-3.5 text-purple" /> 7th Semester · BSCS
-                    </span>
-                    <span className="flex items-center gap-1.5 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
-                      <MapPin className="h-3.5 w-3.5 text-cyan" /> Skardu → Islamabad
-                    </span>
-                  </div>
                 </div>
               </div>
 
@@ -111,35 +84,11 @@ const About = () => {
                   </p>
                 </div>
 
-                {/* Facts */}
-                <div
-                  ref={ref(2)}
-                  style={d(160)}
-                  className={`grid grid-cols-2 gap-3 sm:grid-cols-4 ${itemClass}`}
-                >
-                  {facts.map(({ icon: Icon, label, value, color }) => (
-                    <div
-                      key={label}
-                      className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 backdrop-blur-xl"
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <Icon className="h-3.5 w-3.5 shrink-0" style={{ color }} />
-                        <p className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">
-                          {label}
-                        </p>
-                      </div>
-                      <p className="mt-1 text-[13px] font-semibold leading-snug text-foreground">
-                        {value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
                 {/* Education + Status */}
                 <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-4">
                   <div
-                    ref={ref(3)}
-                    style={d(240)}
+                    ref={ref(2)}
+                    style={d(160)}
                     className={`flex flex-col rounded-3xl border border-white/10 bg-black/30 p-4 shadow-lg backdrop-blur-xl ${itemClass}`}
                   >
                     <div className="mb-2 flex items-center gap-3">
@@ -160,8 +109,8 @@ const About = () => {
                   </div>
 
                   <div
-                    ref={ref(4)}
-                    style={d(320)}
+                    ref={ref(3)}
+                    style={d(240)}
                     className={`flex flex-col rounded-3xl border border-white/10 bg-black/30 p-4 shadow-lg backdrop-blur-xl ${itemClass}`}
                   >
                     <div className="mb-2 flex items-center gap-3">
