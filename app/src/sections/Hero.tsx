@@ -359,7 +359,7 @@ const Hero = () => {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="GitHub"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-300 hover:shadow-[0_0_25px_rgba(0,212,255,0.25)] active:scale-95"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-300 hover:shadow-[0_0_25px_rgba(0,212,255,0.25)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
                 >
                   <Github className="w-5 h-5" />
                 </a>
@@ -370,7 +370,7 @@ const Hero = () => {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="LinkedIn"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/40 hover:bg-purple-500/10 hover:text-purple-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.25)] active:scale-95"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/40 hover:bg-purple-500/10 hover:text-purple-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.25)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
                 >
                   <Linkedin className="w-5 h-5" />
                 </a>
@@ -381,7 +381,7 @@ const Hero = () => {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="WhatsApp"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-400/40 hover:bg-emerald-500/10 hover:text-emerald-300 hover:shadow-[0_0_25px_rgba(16,185,129,0.25)] active:scale-95"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-400/40 hover:bg-emerald-500/10 hover:text-emerald-300 hover:shadow-[0_0_25px_rgba(16,185,129,0.25)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
                 >
                   <MessageCircle className="w-5 h-5" />
                 </a>
@@ -392,7 +392,7 @@ const Hero = () => {
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Upwork"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 font-bold transition-all duration-300 hover:-translate-y-1 hover:border-lime-400/40 hover:bg-lime-500/10 hover:text-lime-300 hover:shadow-[0_0_25px_rgba(132,204,22,0.25)] active:scale-95"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 font-bold transition-all duration-300 hover:-translate-y-1 hover:border-lime-400/40 hover:bg-lime-500/10 hover:text-lime-300 hover:shadow-[0_0_25px_rgba(132,204,22,0.25)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
                 >
                   U
                 </a>
@@ -401,7 +401,7 @@ const Hero = () => {
                 <a
                   href="mailto:210muzammilabbas@gmail.com"
                   aria-label="Email"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:text-white hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] active:scale-95"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:text-white hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
                 >
                   <Mail className="w-5 h-5" />
                 </a>
