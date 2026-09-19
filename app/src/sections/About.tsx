@@ -45,14 +45,14 @@ const About = () => {
               <div
                 ref={ref(0)}
                 style={d(0)}
-                className={`relative min-h-[320px] sm:min-h-[380px] lg:col-span-5 lg:min-h-0 ${itemClass}`}
+                className={`relative aspect-[4/5] sm:aspect-auto sm:h-[480px] lg:col-span-5 lg:h-auto lg:min-h-[400px] ${itemClass}`}
               >
                 <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-cyan to-purple opacity-25 blur" />
                 <div className="relative h-full overflow-hidden rounded-[1.7rem] border border-white/10 bg-card/30">
                   <img
                     src="/images/p1.png"
                     alt="Muzammil Abbas"
-                    className="absolute inset-0 h-full w-full object-cover object-[50%_18%]"
+                    className="absolute inset-0 h-full w-full object-cover object-[50%_22%]"
                   />
                 </div>
               </div>
