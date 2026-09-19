@@ -61,30 +61,33 @@ const roles: Role[] = [
   },
 ];
 
-const useReducedMotionOrTouch = () => {
-  const [disabled, setDisabled] = useState(false);
+const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = useState(false);
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce), (pointer: coarse)');
-    const update = () => setDisabled(mq.matches);
+    const mq = window.matchMedia(query);
+    const update = () => setMatches(mq.matches);
     update();
     mq.addEventListener('change', update);
     return () => mq.removeEventListener('change', update);
-  }, []);
-  return disabled;
+  }, [query]);
+  return matches;
 };
 
 const RoleItem = ({
   role,
   index,
   noTilt,
+  reduced,
 }: {
   role: Role;
   index: number;
   noTilt: boolean;
+  reduced: boolean;
 }) => {
   const itemRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [inView, setInView] = useState(false);
+  const visible = inView || reduced;
   const isLeft = index % 2 === 0;
   const Icon = role.icon;
 
@@ -92,7 +95,7 @@ const RoleItem = ({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
+          setInView(true);
           observer.disconnect();
         }
       },
@@ -129,9 +132,9 @@ const RoleItem = ({
       {/* Node on the roadmap line */}
       <div className="absolute left-4 md:left-1/2 top-8 -translate-x-1/2 z-10">
         <div
-          className={`relative flex h-10 w-10 items-center justify-center rounded-full border-2 bg-background transition-all duration-700 ${
-            visible ? 'scale-100 opacity-100' : 'scale-50 opacity-0'
-          }`}
+          className={`relative flex h-10 w-10 items-center justify-center rounded-full border-2 bg-background ${
+            reduced ? '' : 'transition-all duration-700'
+          } ${visible ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}
           style={{
             borderColor: role.accent,
             boxShadow: visible ? `0 0 24px ${role.accent}88` : 'none',
@@ -147,13 +150,15 @@ const RoleItem = ({
 
       {/* Card */}
       <div
-        className={`${isLeft ? 'md:col-start-1' : 'md:col-start-2'} transition-all duration-1000 ease-out`}
+        className={`${isLeft ? 'md:col-start-1' : 'md:col-start-2'} ${
+          reduced ? '' : 'transition-all duration-1000 ease-out'
+        }`}
         style={{
           opacity: visible ? 1 : 0,
           transform: visible
             ? 'translate3d(0,0,0) rotateY(0deg)'
             : `translate3d(${revealFrom}px,40px,0) rotateY(${isLeft ? 25 : -25}deg)`,
-          transitionDelay: '150ms',
+          transitionDelay: reduced ? '0ms' : '150ms',
           perspective: '1200px',
         }}
       >
@@ -164,13 +169,17 @@ const RoleItem = ({
           className="exp-card group relative overflow-hidden rounded-2xl border border-white/10 bg-card/80 backdrop-blur-xl p-6 sm:p-8"
           style={{
             transformStyle: 'preserve-3d',
-            transition: 'transform 0.25s ease-out, border-color 0.3s, box-shadow 0.3s',
-            willChange: 'transform',
+            transition: reduced
+              ? 'none'
+              : 'transform 0.25s ease-out, border-color 0.3s, box-shadow 0.3s',
+            willChange: noTilt ? 'auto' : 'transform',
           }}
         >
           {/* Cursor spotlight */}
           <div
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            className={`pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 ${
+              reduced ? '' : 'transition-opacity duration-300'
+            }`}
             style={{
               background: `radial-gradient(400px circle at var(--mx,50%) var(--my,50%), ${role.accent}22, transparent 60%)`,
             }}
@@ -240,15 +249,18 @@ const RoleItem = ({
 const Experience = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [headerVisible, setHeaderVisible] = useState(false);
+  const [headerSeen, setHeaderSeen] = useState(false);
   const [progress, setProgress] = useState(0);
-  const noTilt = useReducedMotionOrTouch();
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const coarse = useMediaQuery('(pointer: coarse)');
+  const noTilt = reduced || coarse;
+  const headerVisible = headerSeen || reduced;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setHeaderVisible(true);
+          setHeaderSeen(true);
           observer.disconnect();
         }
       },
@@ -297,7 +309,7 @@ const Experience = () => {
       <div className="relative mx-auto max-w-5xl">
         {/* Header */}
         <div
-          className={`mb-14 text-center transition-all duration-700 ${
+          className={`mb-14 text-center ${reduced ? '' : 'transition-all duration-700'} ${
             headerVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
           }`}
         >
@@ -323,12 +335,12 @@ const Experience = () => {
               height: `${progress * 100}%`,
               background: 'linear-gradient(to bottom, #00d4ff, #a855f7, #10b981)',
               boxShadow: '0 0 14px rgba(0,212,255,0.6)',
-              transition: 'height 0.15s linear',
+              transition: reduced ? 'none' : 'height 0.15s linear',
             }}
           />
 
           {roles.map((role, index) => (
-            <RoleItem key={role.step} role={role} index={index} noTilt={noTilt} />
+            <RoleItem key={role.step} role={role} index={index} noTilt={noTilt} reduced={reduced} />
           ))}
         </div>
 
