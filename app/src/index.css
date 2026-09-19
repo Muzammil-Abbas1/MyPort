@@ -167,3 +167,15 @@
 @media (min-width: 640px) {
   .code-block pre { font-size: 14px; }
 }
+
+/* 3D reveal used by useScrollStage on phones / short windows */
+.stage-rv {
+  opacity: 0;
+  transform: perspective(1100px) translate3d(0, 36px, -90px) rotateX(-9deg);
+  transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--d, 0ms);
+}
+.stage-rv.stage-in {
+  opacity: 1;
+  transform: none;
+}
