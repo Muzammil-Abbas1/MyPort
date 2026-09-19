@@ -1,4 +1,5 @@
 import { ArrowUp, Github, Linkedin, MessageCircle, Mail, MapPin } from 'lucide-react';
+import { scrollBehavior } from '@/lib/scroll';
 
 const links = [
   { label: 'Projects', id: 'projects' },
@@ -16,7 +17,7 @@ const socials = [
 ];
 
 const scrollToId = (id: string) =>
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior() });
 
 const Footer = () => {
   return (
@@ -32,7 +33,7 @@ const Footer = () => {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: scrollBehavior() });
               }}
               className="inline-block text-xl font-extrabold tracking-tight text-white"
             >
@@ -126,7 +127,7 @@ const Footer = () => {
           </p>
           <p>Designed &amp; built with React, TypeScript and Tailwind CSS</p>
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => window.scrollTo({ top: 0, behavior: scrollBehavior() })}
             className="group flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-white/70 transition hover:border-cyan/40 hover:text-cyan"
           >
             Back to top

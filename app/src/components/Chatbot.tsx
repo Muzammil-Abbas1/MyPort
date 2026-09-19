@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, Fragment } from "react";
+import { scrollBehavior } from '@/lib/scroll';
 import type { KeyboardEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -148,7 +149,7 @@ const Chatbot = () => {
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    messagesEndRef.current?.scrollIntoView({ behavior: scrollBehavior(), block: "end" });
   }, [messages, isTyping]);
 
   useEffect(() => {
