@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="n8n workflow: Webhook to AI Agent to Response">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#1a0f2e"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00d4ff"/>
+      <stop offset="1" stop-color="#EA4B71"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.05"/>
+    </pattern>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+
+  <!-- connections -->
+  <path d="M340 340 C 410 340, 410 340, 470 340" stroke="url(#line)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M730 340 C 790 340, 790 340, 850 340" stroke="url(#line)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="405" cy="340" r="6" fill="#00d4ff"/>
+  <circle cx="790" cy="340" r="6" fill="#EA4B71"/>
+
+  <!-- Node 1: Webhook -->
+  <g>
+    <rect x="120" y="270" width="220" height="140" rx="22" fill="#111827" stroke="#00d4ff" stroke-opacity="0.6" stroke-width="2"/>
+    <circle cx="170" cy="320" r="18" fill="#00d4ff" fill-opacity="0.15" stroke="#00d4ff"/>
+    <path d="M162 320h16m-6-6 6 6-6 6" stroke="#00d4ff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="150" y="374" fill="#ffffff" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Webhook</text>
+    <text x="150" y="398" fill="#9ca3af" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16">Visitor question</text>
+  </g>
+
+  <!-- Node 2: AI Agent -->
+  <g filter="url(#glow)">
+    <rect x="470" y="255" width="260" height="170" rx="26" fill="#161227" stroke="#EA4B71" stroke-width="3"/>
+  </g>
+  <g>
+    <circle cx="520" cy="310" r="22" fill="#EA4B71" fill-opacity="0.18" stroke="#EA4B71"/>
+    <circle cx="512" cy="306" r="3.5" fill="#EA4B71"/>
+    <circle cx="528" cy="306" r="3.5" fill="#EA4B71"/>
+    <path d="M510 318q10 8 20 0" stroke="#EA4B71" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <text x="504" y="374" fill="#ffffff" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">AI Agent</text>
+    <text x="504" y="400" fill="#9ca3af" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16">Reasons + answers</text>
+  </g>
+
+  <!-- Node 3: Response -->
+  <g>
+    <rect x="850" y="270" width="230" height="140" rx="22" fill="#111827" stroke="#10b981" stroke-opacity="0.6" stroke-width="2"/>
+    <circle cx="900" cy="320" r="18" fill="#10b981" fill-opacity="0.15" stroke="#10b981"/>
+    <path d="M891 320l7 7 12-14" stroke="#10b981" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="880" y="374" fill="#ffffff" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="26" font-weight="700">Response</text>
+    <text x="880" y="398" fill="#9ca3af" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16">Back to chat widget</text>
+  </g>
+
+  <text x="600" y="150" text-anchor="middle" fill="#ffffff" fill-opacity="0.9" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="40" font-weight="800">n8n · Agentic AI workflow</text>
+  <text x="600" y="192" text-anchor="middle" fill="#9ca3af" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20">Illustration of the workflow behind the portfolio assistant</text>
+</svg>

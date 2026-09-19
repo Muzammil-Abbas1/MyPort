@@ -31,6 +31,46 @@ const FALLBACK_ERROR =
 const REQUEST_TIMEOUT_MS = 25000;
 const HISTORY_LIMIT = 10;
 
+/** Max messages one visitor may send per browser session (also enforced on the server). */
+const SESSION_LIMIT = 15;
+const LOW_WARNING_AT = 5;
+
+const LIMIT_MESSAGE = `You've reached the limit of ${SESSION_LIMIT} messages for this session. To keep chatting, please email Muzammil at 210muzammilabbas@gmail.com or message him on WhatsApp +92 3118911228.`;
+
+const storage = {
+  get: (key: string) => {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  set: (key: string, value: string) => {
+    try {
+      sessionStorage.setItem(key, value);
+    } catch {
+      /* storage unavailable (private mode); the counter stays in memory */
+    }
+  },
+};
+
+const getSessionId = () => {
+  let id = storage.get("chat_session_id");
+  if (!id) {
+    id =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    storage.set("chat_session_id", id);
+  }
+  return id;
+};
+
+const readUsed = () => {
+  const n = Number(storage.get("chat_used") ?? 0);
+  return Number.isFinite(n) ? Math.min(Math.max(Math.floor(n), 0), SESSION_LIMIT) : 0;
+};
+
 /** Renders **bold** and turns URLs/emails into safe clickable links (no HTML injection). */
 const renderWithLinks = (text: string) =>
   text.split(/(\*\*[^*\n]+\*\*)/g).map((chunk, i) =>
@@ -71,6 +111,16 @@ const Chatbot = () => {
   const [messages, setMessages] = useState<Message[]>([GREETING]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [used, setUsed] = useState(readUsed);
+
+  const remaining = SESSION_LIMIT - used;
+  const limitReached = remaining <= 0;
+
+  const recordUsed = (n: number) => {
+    const value = Math.min(Math.max(n, 0), SESSION_LIMIT);
+    setUsed(value);
+    storage.set("chat_used", String(value));
+  };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -113,6 +163,7 @@ const Chatbot = () => {
         headers: { "Content-Type": "application/json" },
         signal: controller.signal,
         body: JSON.stringify({
+          sessionId: getSessionId(),
           messages: history
             .filter((m) => !m.error)
             .slice(-HISTORY_LIMIT)
@@ -122,11 +173,25 @@ const Chatbot = () => {
       const data = (await res.json().catch(() => null)) as {
         reply?: string;
         error?: string;
+        code?: string;
+        remaining?: number;
       } | null;
 
+      if (data?.code === "session_limit") {
+        recordUsed(SESSION_LIMIT);
+        setMessages((prev) => [
+          ...prev.filter((m) => !m.error),
+          { id: `${Date.now()}-l`, role: "assistant", content: LIMIT_MESSAGE },
+        ]);
+        return;
+      }
       if (!res.ok || !data?.reply) {
         throw new Error(data?.error || FALLBACK_ERROR);
       }
+      // A message only counts once it was answered successfully.
+      recordUsed(
+        typeof data.remaining === "number" ? SESSION_LIMIT - data.remaining : readUsed() + 1
+      );
       setMessages((prev) => [
         ...prev,
         { id: `${Date.now()}-a`, role: "assistant", content: data.reply as string },
@@ -150,7 +215,7 @@ const Chatbot = () => {
 
   const send = (raw: string) => {
     const text = raw.trim();
-    if (!text || isTyping) return;
+    if (!text || isTyping || limitReached) return;
     const next: Message[] = [...messages, { id: `${Date.now()}-u`, role: "user", content: text }];
     setMessages(next);
     setInput("");
@@ -158,7 +223,7 @@ const Chatbot = () => {
   };
 
   const retry = () => {
-    if (isTyping) return;
+    if (isTyping || limitReached) return;
     const history = messages.filter((m) => !m.error);
     setMessages(history);
     void requestReply(history);
@@ -304,7 +369,7 @@ const Chatbot = () => {
           </div>
 
           {/* Quick Replies (only before the first question) */}
-          {!hasUserMessage && (
+          {!hasUserMessage && !limitReached && (
             <div className="px-4 py-2 bg-background border-t border-border flex-shrink-0">
               <div className="flex flex-wrap gap-2">
                 {QUICK_REPLIES.map((reply) => (
@@ -323,6 +388,16 @@ const Chatbot = () => {
 
           {/* Input */}
           <div className="p-3 sm:p-4 bg-card border-t border-border flex-shrink-0">
+            {!limitReached && remaining <= LOW_WARNING_AT && (
+              <p className="mb-2 text-center text-xs text-amber-300/90">
+                {remaining} message{remaining === 1 ? "" : "s"} left in this session
+              </p>
+            )}
+            {limitReached && (
+              <p className="mb-2 text-center text-xs text-muted-foreground">
+                Message limit reached for this session.
+              </p>
+            )}
             <div className="flex gap-2">
               <Input
                 ref={inputRef}
@@ -330,13 +405,14 @@ const Chatbot = () => {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={onKeyDown}
                 maxLength={500}
+                disabled={limitReached}
                 aria-label="Type your message"
-                placeholder="Ask about Muzammil..."
+                placeholder={limitReached ? "Message limit reached" : "Ask about Muzammil..."}
                 className="flex-1 bg-background border-border focus:border-cyan focus:ring-cyan/20"
               />
               <Button
                 onClick={() => send(input)}
-                disabled={!input.trim() || isTyping}
+                disabled={!input.trim() || isTyping || limitReached}
                 aria-label="Send message"
                 size="icon"
                 className="bg-gradient-to-r from-cyan to-purple hover:opacity-90 disabled:opacity-50"
