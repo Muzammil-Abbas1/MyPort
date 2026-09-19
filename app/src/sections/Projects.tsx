@@ -1,57 +1,46 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Github, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import SectionHeader from "@/components/SectionHeader";
+import type { KeyboardEvent, TouchEvent } from "react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, Github, Info } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import type { Project } from "@/types";
 
 const projects: Project[] = [
   {
-    id: "cv-filter",
-    title: "CV Filter System for HR",
-    tagline: "AI-powered resume screening and candidate ranking system",
-    problem: "HR teams spend countless hours manually reviewing resumes",
-    solution:
-      "Built an intelligent system using NLP and ML to automatically screen and rank candidates",
-    results: "Automated resume analysis, relevance scoring, and candidate recommendations",
-    image: "/images/project-cv-filter.png",
-    tech: ["Python", "Streamlit", "NLP", "Machine Learning"],
-    liveDemo: "https://resume-matcher-hr.streamlit.app/",
-    github: "https://github.com/Muzammil-Abbas1/resume-matcher-pro",
-  },
-
-  // ✅ KEEP chatbot
-  {
-    id: "chatbot",
-    title: "Custom Business Chatbot",
-    tagline: "AI-powered customer support automation",
-    problem: "Businesses need 24/7 customer support but can't afford round-the-clock staff",
-    solution:
-      "Created intelligent chatbots that handle customer queries using NLP and contextual understanding",
-    results: "Instant customer responses, improved engagement, reduced support costs",
-    image: "/images/project-chatbot.png",
-    tech: ["Python", "NLP", "Flask", "AI/ML"],
-    github: "#",
-  },
-
-  // ✅ KEEP crypto bot
-  {
-    id: "crypto-scalping-bot",
-    title: "Algorithmic Crypto Trading Bot",
-    tagline: "Technical analysis-based automated trading system",
+    id: "skin-atelier",
+    title: "Skin Atelier — Clinic Website",
+    tagline: "Elegant booking website for a premium dermatology & aesthetics clinic",
     problem:
-      "Crypto markets move 24/7 making manual monitoring impossible and emotional decisions costly",
+      "The clinic needed a polished, trustworthy web presence that converts visitors into booked appointments",
     solution:
-      "Developed a 3-layer filtering system: 15m EMA trend direction, 5m VWAP pullback zones, and 1m volume-confirmed entries with dynamic risk parameters",
+      "Designed and built a fast React + TypeScript site with smooth animations, service pages, and direct WhatsApp/booking CTAs",
     results:
-      "Real-time trade signals with 5-level strictness control, interactive charts, and automated market analysis",
-    image: "/images/pp1.png",
-    tech: ["Python", "Streamlit", "ccxt", "Plotly", "Pandas", "NumPy"],
-    github: "https://github.com/Muzammil-Abbas1/Crypto-Scalping-Bot ",
+      "Live production site with a professional brand feel, improved credibility, and a clear path from visit to booking",
+    image: "/images/skin.png",
+    tech: ["React", "TypeScript", "Vite", "Tailwind CSS"],
+    liveDemo: "https://skin-atelier-website.vercel.app",
+    github: "https://github.com/Muzammil-Abbas1/skin-atelier-website",
   },
-
-  // ❌ REMOVED: trading-bot (LSTM)
-
-  // ✅ NEW #1: Web-based Ecommerce
+  {
+    id: "contact-manager",
+    title: "Contact Management System",
+    tagline: "Full-stack contact manager with secure authentication",
+    problem:
+      "Users need a secure, reliable way to store and manage personal contacts with proper access control",
+    solution:
+      "Built a Spring Boot + Spring Security backend (JWT, httpOnly cookies, CSRF protection, MySQL) with a React frontend for paginated CRUD contact management",
+    results:
+      "Secure register/login flow, fast contact search and editing, and a tested backend (JUnit/Mockito) verified with SonarQube",
+    image: "/images/CMS.png",
+    tech: ["Java", "Spring Boot", "Spring Security", "MySQL", "React", "JWT"],
+    github: "https://github.com/Muzammil-Abbas1/cohort-9-java-14058-muhammad",
+  },
   {
     id: "ecommerce-store",
     title: "Modern Ecommerce Store",
@@ -66,10 +55,45 @@ const projects: Project[] = [
     liveDemo: "https://www.magic-plush.com/breathing-plush/breathing-plush-stitch-with-soothing-lullaby/",
     github: "#",
   },
-
- 
-
-  // ✅ NEW #3: Web Scraping
+  {
+    id: "cv-filter",
+    title: "CV Filter System for HR",
+    tagline: "AI-powered resume screening and candidate ranking system",
+    problem: "HR teams spend countless hours manually reviewing resumes",
+    solution:
+      "Built an intelligent system using NLP and ML to automatically screen and rank candidates",
+    results: "Automated resume analysis, relevance scoring, and candidate recommendations",
+    image: "/images/project-cv-filter.png",
+    tech: ["Python", "Streamlit", "NLP", "Machine Learning"],
+    liveDemo: "https://resume-matcher-hr.streamlit.app/",
+    github: "https://github.com/Muzammil-Abbas1/resume-matcher-pro",
+  },
+  {
+    id: "crypto-scalping-bot",
+    title: "Algorithmic Crypto Trading Bot",
+    tagline: "Technical analysis-based automated trading system",
+    problem:
+      "Crypto markets move 24/7 making manual monitoring impossible and emotional decisions costly",
+    solution:
+      "Developed a 3-layer filtering system: 15m EMA trend direction, 5m VWAP pullback zones, and 1m volume-confirmed entries with dynamic risk parameters",
+    results:
+      "Real-time trade signals with 5-level strictness control, interactive charts, and automated market analysis",
+    image: "/images/pp1.png",
+    tech: ["Python", "Streamlit", "ccxt", "Plotly", "Pandas", "NumPy"],
+    github: "https://github.com/Muzammil-Abbas1/Crypto-Scalping-Bot",
+  },
+  {
+    id: "chatbot",
+    title: "Custom Business Chatbot",
+    tagline: "AI-powered customer support automation",
+    problem: "Businesses need 24/7 customer support but can't afford round-the-clock staff",
+    solution:
+      "Created intelligent chatbots that handle customer queries using NLP and contextual understanding",
+    results: "Instant customer responses, improved engagement, reduced support costs",
+    image: "/images/project-chatbot.png",
+    tech: ["Python", "NLP", "Flask", "AI/ML"],
+    github: "#",
+  },
   {
     id: "web-scraper",
     title: "Smart Web Scraping Tool",
@@ -87,262 +111,357 @@ const projects: Project[] = [
   },
 ];
 
-const openLink = (url?: string) => {
-  if (!url || url === "#") return;
-  window.open(url, "_blank", "noopener,noreferrer");
+const accents = ["#00d4ff", "#a855f7", "#10b981", "#f59e0b", "#f43f5e", "#38bdf8", "#84cc16"];
+const N = projects.length;
+const HALF = Math.floor(N / 2);
+
+const isLink = (url?: string) => !!url && url.trim() !== "#" && url.trim() !== "";
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const update = () => setMatches(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [query]);
+  return matches;
 };
 
-const ProjectCard = ({
-  project,
-  index,
-  isVisible,
-}: {
-  project: Project;
-  index: number;
-  isVisible: boolean;
-}) => {
-  const [expanded, setExpanded] = useState(false);
-
+const Thumb = ({ project }: { project: Project }) => {
+  const [failed, setFailed] = useState(false);
   return (
-    <div
-      className={`min-w-[320px] md:min-w-[420px] snap-center transition-all duration-700 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
-      style={{ transitionDelay: `${index * 120}ms` }}
-    >
-      <div className="group relative rounded-[2rem] overflow-hidden border border-white/10 bg-black/30 backdrop-blur-xl shadow-xl transition-all duration-500 hover:-translate-y-1 hover:border-cyan/30">
-        {/* Card Glow */}
-        <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-          <div className="absolute -top-20 -right-20 h-44 w-44 rounded-full bg-cyan/20 blur-3xl" />
-          <div className="absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-purple/20 blur-3xl" />
+    <>
+      {!failed && (
+        <img
+          src={project.image}
+          alt={project.title}
+          loading="lazy"
+          draggable={false}
+          onError={() => setFailed(true)}
+          className="absolute inset-0 h-full w-full object-cover object-top"
+        />
+      )}
+      {failed && (
+        <div className="absolute inset-0 flex items-center justify-center text-5xl font-black text-white/10">
+          {project.title
+            .split(" ")
+            .map((w) => w[0])
+            .slice(0, 2)
+            .join("")}
         </div>
-
-        {/* Image */}
-        <div className="relative h-56 overflow-hidden">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-        </div>
-
-        {/* Body */}
-        <div className="relative p-8 flex flex-col">
-          <h3 className="text-2xl font-extrabold tracking-tight text-cyan drop-shadow-[0_0_12px_rgba(6,182,212,0.45)]">
-            {project.title}
-          </h3>
-
-          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-            {project.tagline}
-          </p>
-
-          {/* Tech Pills */}
-          <div className="mt-6 flex flex-wrap gap-2">
-            {project.tech.slice(0, 3).map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-cyan/20 bg-cyan/10 px-3 py-1 text-xs font-semibold text-cyan"
-              >
-                {t}
-              </span>
-            ))}
-            {project.tech.length > 3 && (
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-muted-foreground">
-                +{project.tech.length - 3}
-              </span>
-            )}
-          </div>
-
-          {/* Expand Button */}
-          <button
-            onClick={() => setExpanded((p) => !p)}
-            className="mt-6 flex w-full items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-foreground transition hover:bg-white/10"
-          >
-            <span className="font-semibold">More details</span>
-            <ChevronDown
-              className={`h-4 w-4 transition-transform duration-300 ${
-                expanded ? "rotate-180" : "rotate-0"
-              }`}
-            />
-          </button>
-
-          {/* Expanded Area */}
-          <div
-            className={`overflow-hidden transition-all duration-500 ${
-              expanded ? "max-h-[650px] opacity-100 mt-5" : "max-h-0 opacity-0 mt-0"
-            }`}
-          >
-            <div className="flex flex-wrap gap-2 mb-5">
-              {project.tech.map((tech) => (
-                <Badge
-                  key={tech}
-                  variant="secondary"
-                  className="bg-cyan/10 text-cyan border border-cyan/20"
-                >
-                  {tech}
-                </Badge>
-              ))}
-            </div>
-
-            <div className="space-y-3 text-sm text-muted-foreground">
-              <p>
-                <span className="font-semibold text-red-400">Problem: </span>
-                {project.problem}
-              </p>
-              <p>
-                <span className="font-semibold text-cyan">Solution: </span>
-                {project.solution}
-              </p>
-              <p>
-                <span className="font-semibold text-green-400">Results: </span>
-                {project.results}
-              </p>
-            </div>
-          </div>
-
-          {/* Buttons */}
-          <div className="mt-7 grid grid-cols-2 gap-4">
-            <Button
-              className={`w-full font-bold ${
-                project.liveDemo && project.liveDemo !== "#"
-                  ? "bg-gradient-to-r from-cyan to-purple text-white hover:opacity-90"
-                  : "bg-white/5 text-muted-foreground cursor-not-allowed"
-              }`}
-              onClick={() => openLink(project.liveDemo)}
-              disabled={!project.liveDemo || project.liveDemo === "#"}
-            >
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Live Demo
-            </Button>
-
-            <Button
-              variant="outline"
-              className={`w-full font-bold ${
-                project.github && project.github !== "#"
-                  ? "border-white/20 text-white hover:bg-white/5"
-                  : "border-white/10 text-muted-foreground cursor-not-allowed"
-              }`}
-              onClick={() => openLink(project.github)}
-              disabled={!project.github || project.github === "#"}
-            >
-              <Github className="w-4 h-4 mr-2" />
-              GitHub
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
 const Projects = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [active, setActive] = useState(0);
+  const [detail, setDetail] = useState<number | null>(null);
+  const [seen, setSeen] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const sortedProjects = useMemo(() => projects, []);
+  const touchX = useRef<number | null>(null);
+  const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const visible = seen || reduced;
+  const accent = accents[active % accents.length];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          setSeen(true);
           observer.disconnect();
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.15 }
     );
-
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
-  const scrollByAmount = (dir: "left" | "right") => {
-    const el = scrollRef.current;
-    if (!el) return;
+  const go = (next: number) => setActive(((next % N) + N) % N);
 
-    const amount = 460;
-    el.scrollBy({
-      left: dir === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
+  const offsetOf = (i: number) => {
+    let o = (i - active) % N;
+    if (o > HALF) o -= N;
+    if (o < -HALF) o += N;
+    return o;
   };
+
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      go(active + 1);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      go(active - 1);
+    }
+  };
+  const onTouchStart = (e: TouchEvent) => {
+    touchX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: TouchEvent) => {
+    if (touchX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) > 45) go(active + (dx < 0 ? 1 : -1));
+  };
+
+  const d = detail === null ? null : projects[detail];
+  const dAccent = detail === null ? accent : accents[detail % accents.length];
 
   return (
     <section
       ref={sectionRef}
       id="projects"
-      className="relative py-20 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
+      className="relative flex min-h-[100svh] flex-col justify-center overflow-x-clip overflow-y-visible bg-background px-4 py-14 sm:px-6 lg:px-8"
     >
-      {/* Background Blobs */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple/10 rounded-full blur-[120px]" />
+      <style>{`
+        .pj-stage { --cw: min(84vw, 340px); --step: calc(var(--cw) * .9); height: clamp(430px, 62svh, 520px); perspective: 1600px; }
+        @media (min-width: 768px) { .pj-stage { --cw: 400px; --step: 330px; } }
+        @media (min-width: 1280px) { .pj-stage { --cw: 440px; --step: 370px; } }
+        .pj-card { position: absolute; top: 0; left: 50%; width: var(--cw); height: 100%; margin-left: calc(var(--cw) / -2); transition: transform .7s cubic-bezier(.22,.8,.24,1), opacity .5s ease, filter .5s ease; will-change: transform; }
+        @media (prefers-reduced-motion: reduce) { .pj-card { transition: none; } }
+      `}</style>
+
+      <div className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute left-1/2 top-1/2 h-[55%] w-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px] transition-colors duration-700"
+          style={{ background: `${accent}1c` }}
+        />
       </div>
 
-      <div className="max-w-7xl mx-auto w-full relative">
-        {/* Header */}
-        <div
-          className={`text-center mb-16 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-            My <span className="text-cyan">Projects</span>
-          </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto">
-            Real-world solutions built with AI, ML, and modern development stacks.
-          </p>
-          <div className="h-1.5 w-20 bg-cyan mx-auto rounded-full mt-6"></div>
-        </div>
+      <div className="relative mx-auto w-full max-w-7xl">
+        <SectionHeader eyebrow="Selected Work" title="My Projects" compact />
 
         {/* Carousel */}
-        <div className="relative group">
-          {/* Left Button */}
-          <button
-            onClick={() => scrollByAmount("left")}
-            className="hidden md:flex absolute left-2 lg:left-4 top-1/2 -translate-y-1/2 z-20
-bg-black/30 hover:bg-cyan/10 border border-white/10 p-3 rounded-full
-transition-all group-hover:scale-110 active:scale-95"
-          >
-            <ChevronLeft className="w-7 h-7 text-white" />
-          </button>
+        <div
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Projects"
+          tabIndex={0}
+          onKeyDown={onKey}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          className={`pj-stage relative outline-none ${
+            reduced ? "" : "transition-opacity duration-1000"
+          } ${visible ? "opacity-100" : "opacity-0"}`}
+          style={{ touchAction: "pan-y" }}
+        >
+          {projects.map((p, i) => {
+            const o = offsetOf(i);
+            const a = Math.abs(o);
+            const on = o === 0;
+            const c = accents[i % accents.length];
+            const hasLive = isLink(p.liveDemo);
+            const hasGit = isLink(p.github);
+            return (
+              <article
+                key={p.id}
+                aria-hidden={!on}
+                aria-label={`${i + 1} of ${N}: ${p.title}`}
+                className="pj-card"
+                style={{
+                  transform: `translateX(calc(${o} * var(--step))) translateZ(${-a * 130}px) scale(${
+                    1 - a * 0.08
+                  })`,
+                  opacity: a === 0 ? 1 : a === 1 ? 0.55 : a === 2 ? 0.22 : 0,
+                  filter: on ? "none" : `brightness(${1 - a * 0.22})`,
+                  zIndex: 10 - a,
+                  pointerEvents: a > 2 ? "none" : "auto",
+                }}
+              >
+                <div
+                  className="relative flex h-full flex-col overflow-hidden rounded-2xl border bg-card"
+                  style={{
+                    borderColor: on ? `${c}66` : "rgba(255,255,255,0.1)",
+                    boxShadow: on ? `0 30px 70px -30px ${c}80` : "0 20px 50px -30px #000",
+                  }}
+                >
+                  {/* Preview */}
+                  <div className="relative min-h-0 flex-1 overflow-hidden bg-gradient-to-br from-bg-tertiary to-black">
+                    <Thumb project={p} />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+                    <span
+                      className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 font-mono text-[10px] tracking-widest backdrop-blur"
+                      style={{ color: c }}
+                    >
+                      {pad(i + 1)} / {pad(N)}
+                    </span>
+                    {hasLive && (
+                      <span
+                        className="absolute right-3 top-3 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 font-mono text-[10px] tracking-widest backdrop-blur"
+                        style={{ color: c }}
+                      >
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full motion-reduce:animate-none" style={{ background: c }} />
+                        LIVE
+                      </span>
+                    )}
+                  </div>
 
-          {/* Right Button */}
-          <button
-            onClick={() => scrollByAmount("right")}
-            className="hidden md:flex absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-20
-bg-black/30 hover:bg-cyan/10 border border-white/10 p-3 rounded-full
-transition-all group-hover:scale-110 active:scale-95"
-          >
-            <ChevronRight className="w-7 h-7 text-white" />
-          </button>
+                  {/* Info */}
+                  <div className="flex shrink-0 flex-col gap-3 p-4 sm:p-5">
+                    <div>
+                      <h3 className="line-clamp-1 text-lg font-bold text-white sm:text-xl">
+                        {p.title}
+                      </h3>
+                      <p className="mt-1 line-clamp-2 min-h-[2.5rem] text-[13px] leading-snug text-muted-foreground sm:text-sm">
+                        {p.tagline}
+                      </p>
+                    </div>
 
-          {/* Scroll Row */}
-          <div
-            ref={scrollRef}
-            className="flex gap-8 overflow-x-auto pb-12 snap-x snap-mandatory px-2 custom-scrollbar"
+                    <div className="flex h-6 gap-1.5 overflow-hidden">
+                      {p.tech.slice(0, 4).map((t) => (
+                        <span
+                          key={t}
+                          className="shrink-0 rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[11px] text-white/75"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                      {p.tech.length > 4 && (
+                        <span className="shrink-0 px-1 py-0.5 font-mono text-[11px] text-white/40">
+                          +{p.tech.length - 4}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
+                      {hasLive ? (
+                        <a
+                          href={p.liveDemo!.trim()}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          tabIndex={on ? 0 : -1}
+                          className="flex h-10 items-center justify-center gap-1.5 rounded-lg text-xs font-bold text-black transition hover:opacity-90 sm:text-sm"
+                          style={{ background: `linear-gradient(90deg, ${c}, #a855f7)` }}
+                        >
+                          <ArrowUpRight className="h-4 w-4" /> Live
+                        </a>
+                      ) : (
+                        <span className="flex h-10 cursor-not-allowed items-center justify-center gap-1.5 rounded-lg bg-white/5 text-xs font-bold text-white/30 sm:text-sm">
+                          <ArrowUpRight className="h-4 w-4" /> Live
+                        </span>
+                      )}
+                      {hasGit ? (
+                        <a
+                          href={p.github.trim()}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          tabIndex={on ? 0 : -1}
+                          className="flex h-10 items-center justify-center gap-1.5 rounded-lg border border-white/20 text-xs font-bold text-white transition hover:bg-white/5 sm:text-sm"
+                        >
+                          <Github className="h-4 w-4" /> Code
+                        </a>
+                      ) : (
+                        <span className="flex h-10 cursor-not-allowed items-center justify-center gap-1.5 rounded-lg border border-white/10 text-xs font-bold text-white/30 sm:text-sm">
+                          <Github className="h-4 w-4" /> Private
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setDetail(i)}
+                        tabIndex={on ? 0 : -1}
+                        aria-label={`Details for ${p.title}`}
+                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/20 text-white transition hover:bg-white/5"
+                      >
+                        <Info className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {!on && a <= 2 && (
+                    <button
+                      type="button"
+                      aria-label={`Show ${p.title}`}
+                      onClick={() => go(i)}
+                      className="absolute inset-0 z-20 cursor-pointer"
+                    />
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        {/* Controls */}
+        <div className="mt-6 flex items-center justify-center gap-5">
+          <button
+            onClick={() => go(active - 1)}
+            aria-label="Previous project"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
           >
-            {sortedProjects.map((project, index) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                index={index}
-                isVisible={isVisible}
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <div className="flex items-center gap-2">
+            {projects.map((p, i) => (
+              <button
+                key={p.id}
+                onClick={() => go(i)}
+                aria-label={`Show ${p.title}`}
+                aria-current={i === active}
+                className="h-1.5 rounded-full transition-all duration-300 motion-reduce:transition-none"
+                style={{
+                  width: i === active ? 26 : 8,
+                  background: i === active ? accent : "rgba(255,255,255,0.2)",
+                }}
               />
             ))}
           </div>
+          <button
+            onClick={() => go(active + 1)}
+            aria-label="Next project"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
         </div>
       </div>
 
-      {/* Hide scrollbar */}
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar { display: none; }
-        .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
+      {/* Case study dialog */}
+      <Dialog open={detail !== null} onOpenChange={(o) => !o && setDetail(null)}>
+        <DialogContent className="max-h-[88svh] overflow-y-auto border-white/10 bg-card sm:max-w-xl">
+          {d && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-xl font-extrabold text-white">{d.title}</DialogTitle>
+                <DialogDescription>{d.tagline}</DialogDescription>
+              </DialogHeader>
+
+              <div className="flex flex-wrap gap-2">
+                {d.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-xs text-white/80"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              <div className="space-y-3 text-sm">
+                {[
+                  { label: "Problem", text: d.problem, color: "#f87171" },
+                  { label: "Solution", text: d.solution, color: dAccent },
+                  { label: "Results", text: d.results, color: "#4ade80" },
+                ].map((b) => (
+                  <div key={b.label} className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
+                    <span
+                      className="mb-1.5 block font-mono text-[11px] font-semibold uppercase tracking-widest"
+                      style={{ color: b.color }}
+                    >
+                      {b.label}
+                    </span>
+                    <p className="leading-relaxed text-muted-foreground">{b.text}</p>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

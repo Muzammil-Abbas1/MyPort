@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import SectionHeader from "@/components/SectionHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { X, Check, Copy, CheckCheck } from 'lucide-react';
 
@@ -157,23 +158,15 @@ def get_user_status(user):
     <section
       ref={sectionRef}
       id="code-quality"
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-background"
+      className="py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-background overflow-x-clip"
     >
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div
-          className={`text-center mb-12 transition-all duration-700 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-4">
-            Code Quality Matters
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Clean, efficient, and maintainable code is my standard. 
-            Less code, fewer bugs, better performance.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="Clean Code"
+          title="Code Quality Matters"
+          subtitle="Clean, efficient, and maintainable code is my standard. Less code, fewer bugs, better performance."
+        />
 
         {/* Code Comparison */}
         <div

@@ -2,16 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import {
-  Github,
-  Linkedin,
   Mail,
   MessageCircle,
   ArrowUpRight,
-  Bot,
-  Workflow,
+  Code2,
+  Coffee,
+  Database,
   Zap,
-  Cpu,
+  Github,
+  Linkedin,
 } from "lucide-react";
+const profileImg = "/images/my1.png";
 
 const AnimatedGrid = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -143,30 +144,30 @@ const AnimatedTitle = () => {
 
   return (
     <div className="relative">
-      <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight min-h-[1.2em]">
+      <h1 className="text-3xl min-[380px]:text-4xl min-[420px]:text-5xl sm:text-6xl md:text-7xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight min-h-[1.2em] lg:whitespace-nowrap">
         <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-300 bg-clip-text text-transparent">
           {text}
         </span>
         <span className="animate-pulse text-cyan-400">|</span>
       </h1>
-      
+
       {/* Floating badges that appear after name */}
       <div className={`flex flex-wrap justify-center gap-3 transition-all duration-700 ${showSubtitle ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         <div className="group flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/30 bg-cyan/5 backdrop-blur-sm hover:bg-cyan/10 hover:border-cyan/50 transition-all duration-300 hover:scale-105">
-          <Bot className="w-4 h-4 text-cyan" />
-          <span className="text-xs font-medium text-cyan/90">n8n Automation</span>
+          <Code2 className="w-4 h-4 text-cyan" />
+          <span className="text-xs font-medium text-cyan/90">Full-Stack Developer</span>
         </div>
         <div className="group flex items-center gap-2 px-4 py-2 rounded-full border border-purple/30 bg-purple/5 backdrop-blur-sm hover:bg-purple/10 hover:border-purple/50 transition-all duration-300 hover:scale-105">
-          <Workflow className="w-4 h-4 text-purple-400" />
-          <span className="text-xs font-medium text-purple-300">Agentic AI</span>
+          <Coffee className="w-4 h-4 text-purple-400" />
+          <span className="text-xs font-medium text-purple-300">Java &amp; Spring Boot</span>
         </div>
         <div className="group flex items-center gap-2 px-4 py-2 rounded-full border border-emerald/30 bg-emerald/5 backdrop-blur-sm hover:bg-emerald/10 hover:border-emerald/50 transition-all duration-300 hover:scale-105">
-          <Zap className="w-4 h-4 text-emerald-400" />
-          <span className="text-xs font-medium text-emerald-300">Workflow Specialist</span>
+          <Database className="w-4 h-4 text-emerald-400" />
+          <span className="text-xs font-medium text-emerald-300">REST APIs &amp; MySQL</span>
         </div>
         <div className="group flex items-center gap-2 px-4 py-2 rounded-full border border-orange/30 bg-orange/5 backdrop-blur-sm hover:bg-orange/10 hover:border-orange/50 transition-all duration-300 hover:scale-105">
-          <Cpu className="w-4 h-4 text-orange-400" />
-          <span className="text-xs font-medium text-orange-300">Frontend Developer</span>
+          <Zap className="w-4 h-4 text-orange-400" />
+          <span className="text-xs font-medium text-orange-300">n8n &amp; Agentic AI</span>
         </div>
       </div>
     </div>
@@ -192,11 +193,11 @@ const Hero = () => {
 
       {/* Main Layout */}
       <div className="relative z-10 w-full px-6 lg:px-12">
-        <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div className="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-10 items-center py-24 lg:py-0">
 
           {/* LEFT SOCIAL LINKS */}
           <div className="hidden lg:flex lg:col-span-3 flex-col gap-4">
-            
+
             {/* GitHub */}
             <a
               href="https://github.com/Muzammil-Abbas1"
@@ -220,7 +221,7 @@ const Hero = () => {
 
             {/* LinkedIn */}
             <a
-              href="https://linkedin.com/in/yourusername"
+              href="https://www.linkedin.com/in/muzammilabbass?utm_source=share_via&utm_content=profile&utm_medium=member_android"
               target="_blank"
               rel="noreferrer"
               className="group rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/30 hover:bg-purple-500/10 hover:shadow-[0_0_35px_rgba(168,85,247,0.15)]"
@@ -303,20 +304,32 @@ const Hero = () => {
 
           {/* CENTER CONTENT */}
           <div className="lg:col-span-6 text-center">
+            {/* Compact profile photo for screens below lg */}
+            <div className="lg:hidden mx-auto mb-6 h-28 w-28 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 p-[3px] shadow-[0_0_30px_rgba(0,212,255,0.25)]">
+              <img
+                src={profileImg}
+                alt="Muzammil Abbas"
+                className="h-full w-full rounded-full border-2 border-black object-cover"
+              />
+            </div>
+
             {/* Available pill with animation */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-xs tracking-widest uppercase mb-8 animate-pulse">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-[10px] sm:text-xs tracking-widest uppercase mb-6 sm:mb-8 animate-pulse">
               <span className="h-2 w-2 rounded-full bg-cyan animate-ping" />
               Available for new projects
             </div>
 
             <AnimatedTitle />
 
-            <p className="text-white/60 max-w-2xl mx-auto mb-10 text-base sm:text-lg mt-8">
-              Building intelligent automation workflows with{" "}
-              <span className="text-cyan font-semibold">n8n</span>,{" "}
-              <span className="text-purple-300 font-semibold">Agentic AI</span>, and{" "}
-              <span className="text-emerald-300 font-semibold">modern web technologies</span>.
-              Transforming complex processes into seamless automated experiences.
+            <p className="text-white/60 max-w-2xl mx-auto mb-10 text-base sm:text-lg mt-8 text-center text-balance leading-relaxed">
+              Full-stack developer building robust REST APIs with{" "}
+              <span className="text-cyan font-semibold whitespace-nowrap">Java &amp; Spring Boot</span>,
+              scalable systems with{" "}
+              <span className="text-purple-300 font-semibold">MySQL</span>, and intelligent
+              automation with{" "}
+              <span className="text-emerald-300 font-semibold whitespace-nowrap">n8n &amp; Agentic AI</span>.
+              I turn complex business logic into fast, reliable,{" "}
+              <span className="whitespace-nowrap">end-to-end</span> products — backend to frontend.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
@@ -336,6 +349,72 @@ const Hero = () => {
               >
                 VIEW MY WORK
               </Button>
+            </div>
+
+            {/* MOBILE SOCIAL LINKS — visible below lg */}
+            <div className="lg:hidden -mt-6">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-cyan-400/40" />
+                <p className="text-[10px] tracking-[0.35em] uppercase text-white/40">
+                  Connect with me
+                </p>
+                <span className="h-px flex-1 bg-gradient-to-l from-transparent via-white/10 to-purple-400/40" />
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-3">
+                {/* GitHub */}
+                <a
+                  href="https://github.com/Muzammil-Abbas1"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="GitHub"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-cyan-300 hover:shadow-[0_0_25px_rgba(0,212,255,0.25)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+
+                {/* LinkedIn */}
+                <a
+                  href="https://www.linkedin.com/in/muzammilabbass?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="LinkedIn"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/40 hover:bg-purple-500/10 hover:text-purple-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.25)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+
+                {/* WhatsApp */}
+                <a
+                  href="https://wa.me/923118911228"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="WhatsApp"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-400/40 hover:bg-emerald-500/10 hover:text-emerald-300 hover:shadow-[0_0_25px_rgba(16,185,129,0.25)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                </a>
+
+                {/* Upwork */}
+                <a
+                  href="https://www.upwork.com/freelancers/~01d8a382d9eac1d30c"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Upwork"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 font-bold transition-all duration-300 hover:-translate-y-1 hover:border-lime-400/40 hover:bg-lime-500/10 hover:text-lime-300 hover:shadow-[0_0_25px_rgba(132,204,22,0.25)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
+                >
+                  U
+                </a>
+
+                {/* Email */}
+                <a
+                  href="mailto:210muzammilabbas@gmail.com"
+                  aria-label="Email"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/35 backdrop-blur-xl text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/10 hover:text-white hover:shadow-[0_0_25px_rgba(255,255,255,0.15)] active:scale-95 motion-reduce:transition-none motion-reduce:transform-none"
+                >
+                  <Mail className="w-5 h-5" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -358,7 +437,7 @@ const Hero = () => {
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-spin" style={{ animationDuration: '8s' }} />
                 <div className="absolute inset-[3px] rounded-full bg-black/60 backdrop-blur-xl flex items-center justify-center overflow-hidden">
                   <img
-                    src="images/my1.png"
+                    src={profileImg}
                     alt="Muzammil Abbas"
                     className="h-56 w-56 rounded-full object-cover"
                   />
@@ -367,7 +446,7 @@ const Hero = () => {
 
               {/* Outer subtle ring */}
               <div className="absolute inset-0 rounded-full border border-white/10 blur-[0.2px]" />
-              
+
               {/* Orbiting dots */}
               <div className="absolute inset-0 animate-spin" style={{ animationDuration: '15s' }}>
                 <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-cyan shadow-[0_0_10px_rgba(0,212,255,0.8)]" />
