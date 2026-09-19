@@ -119,6 +119,7 @@ const clientIp = (req: Req) => {
 /* ------------------------------------------------------------------ */
 const SESSION_MAX = 15;
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
+const SERVER_TIMEOUT_MS = 20000;
 const sessions = new Map<string, { count: number; start: number }>();
 
 const sessionUsed = (key: string) => {
@@ -128,11 +129,18 @@ const sessionUsed = (key: string) => {
   return entry.count;
 };
 
-const bumpSession = (key: string) => {
+/**
+ * Reserves one message slot before the AI request is made. The check and the
+ * increment happen in the same synchronous step, so concurrent requests with
+ * the same session can never push the count past SESSION_MAX.
+ */
+const reserveSession = (key: string) => {
   const now = Date.now();
   const entry = sessions.get(key);
   if (!entry || now - entry.start > SESSION_TTL_MS) {
     sessions.set(key, { count: 1, start: now });
+  } else if (entry.count >= SESSION_MAX) {
+    return false;
   } else {
     entry.count += 1;
   }
@@ -141,6 +149,13 @@ const bumpSession = (key: string) => {
       if (now - v.start > SESSION_TTL_MS) sessions.delete(k);
     }
   }
+  return true;
+};
+
+/** Gives the slot back when no model produced an answer. */
+const releaseSession = (key: string) => {
+  const entry = sessions.get(key);
+  if (entry && entry.count > 0) entry.count -= 1;
 };
 
 const SESSION_LIMIT_MESSAGE = `You've reached the limit of ${SESSION_MAX} messages for this session. To keep chatting, please email Muzammil at 210muzammilabbas@gmail.com or message him on WhatsApp +92 3118911228.`;
@@ -225,14 +240,17 @@ export default async function handler(req: Req, res: Res) {
 
   // Without a valid session id, fall back to counting per IP address.
   const sessionKey = readSessionId(data) ? `s:${readSessionId(data)}` : `ip:${ip}`;
-  if (sessionUsed(sessionKey) >= SESSION_MAX) {
+  if (!reserveSession(sessionKey)) {
     return res
       .status(429)
       .json({ error: SESSION_LIMIT_MESSAGE, code: "session_limit", remaining: 0 });
   }
+  let answered = false;
 
+  // Must stay below the browser's 25 s request timeout, so a reply that is
+  // counted against the session is never lost to a client-side abort.
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 25000);
+  const timer = setTimeout(() => controller.abort(), SERVER_TIMEOUT_MS);
 
   // Each Groq model has its own free-tier allowance (tokens/minute and requests/day),
   // so when one is rate limited or unavailable we fall through to the next.
@@ -277,7 +295,7 @@ export default async function handler(req: Req, res: Res) {
           lastDetail = `${model} returned an empty answer`;
           continue;
         }
-        bumpSession(sessionKey);
+        answered = true;
         return res.status(200).json({ reply, remaining: SESSION_MAX - sessionUsed(sessionKey) });
       }
 
@@ -312,5 +330,6 @@ export default async function handler(req: Req, res: Res) {
       .json({ error: aborted ? "The AI took too long to answer." : "Could not reach the AI service." });
   } finally {
     clearTimeout(timer);
+    if (!answered) releaseSession(sessionKey);
   }
 }

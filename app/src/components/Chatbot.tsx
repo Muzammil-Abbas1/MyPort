@@ -34,6 +34,8 @@ const HISTORY_LIMIT = 10;
 /** Max messages one visitor may send per browser session (also enforced on the server). */
 const SESSION_LIMIT = 15;
 const LOW_WARNING_AT = 5;
+/** Same window the server uses before it forgets a session. */
+const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 
 const LIMIT_MESSAGE = `You've reached the limit of ${SESSION_LIMIT} messages for this session. To keep chatting, please email Muzammil at 210muzammilabbas@gmail.com or message him on WhatsApp +92 3118911228.`;
 
@@ -66,7 +68,14 @@ const getSessionId = () => {
   return id;
 };
 
+/** Messages used so far; resets once the 12-hour session window has passed. */
 const readUsed = () => {
+  const started = Number(storage.get("chat_started") ?? 0);
+  if (started && Date.now() - started > SESSION_TTL_MS) {
+    storage.set("chat_used", "0");
+    storage.set("chat_started", "");
+    return 0;
+  }
   const n = Number(storage.get("chat_used") ?? 0);
   return Number.isFinite(n) ? Math.min(Math.max(Math.floor(n), 0), SESSION_LIMIT) : 0;
 };
@@ -120,7 +129,19 @@ const Chatbot = () => {
     const value = Math.min(Math.max(n, 0), SESSION_LIMIT);
     setUsed(value);
     storage.set("chat_used", String(value));
+    if (value > 0 && !storage.get("chat_started")) storage.set("chat_started", String(Date.now()));
+    if (value === 0) storage.set("chat_started", "");
   };
+
+  // If the tab stays open past the session window, unlock the chat again.
+  useEffect(() => {
+    if (used <= 0) return;
+    const started = Number(storage.get("chat_started") ?? 0);
+    if (!started) return;
+    const wait = Math.max(0, started + SESSION_TTL_MS - Date.now()) + 500;
+    const timer = setTimeout(() => setUsed(readUsed()), Math.min(wait, 2 ** 31 - 1));
+    return () => clearTimeout(timer);
+  }, [used]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -215,7 +236,9 @@ const Chatbot = () => {
 
   const send = (raw: string) => {
     const text = raw.trim();
-    if (!text || isTyping || limitReached) return;
+    const current = readUsed(); // also applies the 12-hour expiry
+    if (current !== used) setUsed(current);
+    if (!text || isTyping || current >= SESSION_LIMIT) return;
     const next: Message[] = [...messages, { id: `${Date.now()}-u`, role: "user", content: text }];
     setMessages(next);
     setInput("");
@@ -223,7 +246,9 @@ const Chatbot = () => {
   };
 
   const retry = () => {
-    if (isTyping || limitReached) return;
+    const current = readUsed();
+    if (current !== used) setUsed(current);
+    if (isTyping || current >= SESSION_LIMIT) return;
     const history = messages.filter((m) => !m.error);
     setMessages(history);
     void requestReply(history);

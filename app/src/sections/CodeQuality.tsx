@@ -185,12 +185,15 @@ const CodeQuality = () => {
       b.style.filter = `brightness(${(1 - 0.5 * t).toFixed(3)})`;
       b.style.zIndex = t < 0.5 ? '2' : '1';
       b.style.pointerEvents = t < 0.5 ? 'auto' : 'none';
+      // inert also removes the hidden card's copy button from keyboard navigation
+      b.inert = t >= 0.5;
 
       a.style.transform = `translate3d(${swing.toFixed(1)}px, ${(LIFT * (1 - t)).toFixed(1)}px, ${(-DEPTH * (1 - t)).toFixed(1)}px)`;
       a.style.filter = `brightness(${(0.5 + 0.5 * t).toFixed(3)})`;
       a.style.opacity = String(Math.min(1, t / 0.2));
       a.style.zIndex = t < 0.5 ? '1' : '2';
       a.style.pointerEvents = t < 0.5 ? 'none' : 'auto';
+      a.inert = t < 0.5;
 
       stageRef.current?.style.setProperty('--t', t.toFixed(3));
       if (dotRef.current) dotRef.current.style.left = `${(t * 100).toFixed(1)}%`;
@@ -206,6 +209,9 @@ const CodeQuality = () => {
         if (beforeRef.current) beforeRef.current.style.removeProperty(p);
         if (afterRef.current) afterRef.current.style.removeProperty(p);
       });
+      // reduced motion shows both cards, so both stay interactive
+      if (beforeRef.current) beforeRef.current.inert = false;
+      if (afterRef.current) afterRef.current.inert = false;
       return;
     }
 
