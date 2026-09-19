@@ -112,17 +112,21 @@ const clientIp = (req: Req) => {
 };
 
 /* ------------------------------------------------------------------ */
-/* Per-session message cap: each visitor gets SESSION_MAX messages.    */
-/* The browser generates a session id (sessionStorage) and sends it.   */
+/* Message budgets, both reserved before the AI is called:             */
+/*  - per visitor: SESSION_MAX messages, keyed by a browser-generated  */
+/*    session id (a visitor can reset it, so it is only a fair-use cap) */
+/*  - per network address: IP_MAX messages, which changing the session */
+/*    id cannot reset                                                   */
 /* In-memory, so it is best effort across serverless instances; the    */
-/* chat widget enforces the same limit on the client.                  */
+/* chat widget enforces the session limit on the client as well.       */
 /* ------------------------------------------------------------------ */
 const SESSION_MAX = 15;
+const IP_MAX = 45;
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 const SERVER_TIMEOUT_MS = 20000;
 const sessions = new Map<string, { count: number; start: number }>();
 
-const sessionUsed = (key: string) => {
+const used = (key: string) => {
   const now = Date.now();
   const entry = sessions.get(key);
   if (!entry || now - entry.start > SESSION_TTL_MS) return 0;
@@ -132,14 +136,14 @@ const sessionUsed = (key: string) => {
 /**
  * Reserves one message slot before the AI request is made. The check and the
  * increment happen in the same synchronous step, so concurrent requests with
- * the same session can never push the count past SESSION_MAX.
+ * the same key can never push the count past its maximum.
  */
-const reserveSession = (key: string) => {
+const reserve = (key: string, max: number) => {
   const now = Date.now();
   const entry = sessions.get(key);
   if (!entry || now - entry.start > SESSION_TTL_MS) {
     sessions.set(key, { count: 1, start: now });
-  } else if (entry.count >= SESSION_MAX) {
+  } else if (entry.count >= max) {
     return false;
   } else {
     entry.count += 1;
@@ -153,10 +157,13 @@ const reserveSession = (key: string) => {
 };
 
 /** Gives the slot back when no model produced an answer. */
-const releaseSession = (key: string) => {
+const release = (key: string) => {
   const entry = sessions.get(key);
   if (entry && entry.count > 0) entry.count -= 1;
 };
+
+const IP_LIMIT_MESSAGE =
+  "A lot of messages have been sent from your network recently. Please email Muzammil at 210muzammilabbas@gmail.com or message him on WhatsApp +92 3118911228.";
 
 const SESSION_LIMIT_MESSAGE = `You've reached the limit of ${SESSION_MAX} messages for this session. To keep chatting, please email Muzammil at 210muzammilabbas@gmail.com or message him on WhatsApp +92 3118911228.`;
 
@@ -238,9 +245,16 @@ export default async function handler(req: Req, res: Res) {
       .json({ error: "You're sending messages too quickly. Please wait a few minutes." });
   }
 
-  // Without a valid session id, fall back to counting per IP address.
-  const sessionKey = readSessionId(data) ? `s:${readSessionId(data)}` : `ip:${ip}`;
-  if (!reserveSession(sessionKey)) {
+  // 1) Network budget: cannot be reset by clearing storage or inventing session ids.
+  const ipKey = `ip:${ip}`;
+  if (!reserve(ipKey, IP_MAX)) {
+    return res.status(429).json({ error: IP_LIMIT_MESSAGE, code: "ip_limit" });
+  }
+  // 2) Per-visitor cap: the session id, or a per-address counter for clients that send none.
+  const sid = readSessionId(data);
+  const visitorKey = sid ? `s:${sid}` : `noid:${ip}`;
+  if (!reserve(visitorKey, SESSION_MAX)) {
+    release(ipKey);
     return res
       .status(429)
       .json({ error: SESSION_LIMIT_MESSAGE, code: "session_limit", remaining: 0 });
@@ -296,7 +310,7 @@ export default async function handler(req: Req, res: Res) {
           continue;
         }
         answered = true;
-        return res.status(200).json({ reply, remaining: SESSION_MAX - sessionUsed(sessionKey) });
+        return res.status(200).json({ reply, remaining: SESSION_MAX - used(visitorKey) });
       }
 
       const text = await upstream.text();
@@ -330,6 +344,9 @@ export default async function handler(req: Req, res: Res) {
       .json({ error: aborted ? "The AI took too long to answer." : "Could not reach the AI service." });
   } finally {
     clearTimeout(timer);
-    if (!answered) releaseSession(sessionKey);
+    if (!answered) {
+      release(ipKey);
+      release(visitorKey);
+    }
   }
 }

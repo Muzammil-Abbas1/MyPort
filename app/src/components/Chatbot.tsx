@@ -78,7 +78,10 @@ const readUsed = () => {
     return 0;
   }
   const n = Number(storage.get("chat_used") ?? 0);
-  return Number.isFinite(n) ? Math.min(Math.max(Math.floor(n), 0), SESSION_LIMIT) : 0;
+  const count = Number.isFinite(n) ? Math.min(Math.max(Math.floor(n), 0), SESSION_LIMIT) : 0;
+  // A count saved without a timestamp (older version of the widget) still gets a bounded expiry.
+  if (count > 0 && !started) storage.set("chat_started", String(Date.now()));
+  return count;
 };
 
 /** Renders **bold** and turns URLs/emails into safe clickable links (no HTML injection). */
@@ -135,14 +138,15 @@ const Chatbot = () => {
   };
 
   // If the tab stays open past the session window, unlock the chat again.
+  // Paused while a request is in flight so a late reply can't be recorded into a reset window.
   useEffect(() => {
-    if (used <= 0) return;
+    if (used <= 0 || isTyping) return;
     const started = Number(storage.get("chat_started") ?? 0);
     if (!started) return;
     const wait = Math.max(0, started + SESSION_TTL_MS - Date.now()) + 500;
     const timer = setTimeout(() => setUsed(readUsed()), Math.min(wait, 2 ** 31 - 1));
     return () => clearTimeout(timer);
-  }, [used]);
+  }, [used, isTyping]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -207,6 +211,14 @@ const Chatbot = () => {
         ]);
         return;
       }
+      if (data?.code === "ip_limit") {
+        // Shared/busy network: not this visitor's own count, so leave it untouched.
+        setMessages((prev) => [
+          ...prev.filter((m) => !m.error),
+          { id: `${Date.now()}-n`, role: "assistant", content: data.error || FALLBACK_ERROR },
+        ]);
+        return;
+      }
       if (!res.ok || !data?.reply) {
         throw new Error(data?.error || FALLBACK_ERROR);
       }
@@ -237,9 +249,10 @@ const Chatbot = () => {
 
   const send = (raw: string) => {
     const text = raw.trim();
+    if (!text || isTyping) return;
     const current = readUsed(); // also applies the 12-hour expiry
     if (current !== used) setUsed(current);
-    if (!text || isTyping || current >= SESSION_LIMIT) return;
+    if (current >= SESSION_LIMIT) return;
     const next: Message[] = [...messages, { id: `${Date.now()}-u`, role: "user", content: text }];
     setMessages(next);
     setInput("");
@@ -247,9 +260,10 @@ const Chatbot = () => {
   };
 
   const retry = () => {
+    if (isTyping) return;
     const current = readUsed();
     if (current !== used) setUsed(current);
-    if (isTyping || current >= SESSION_LIMIT) return;
+    if (current >= SESSION_LIMIT) return;
     const history = messages.filter((m) => !m.error);
     setMessages(history);
     void requestReply(history);
