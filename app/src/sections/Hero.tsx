@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { scrollBehavior } from '@/lib/scroll';
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import {
@@ -177,7 +178,7 @@ const AnimatedTitle = () => {
 const Hero = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
-    if (element) element.scrollIntoView({ behavior: "smooth" });
+    if (element) element.scrollIntoView({ behavior: scrollBehavior() });
   };
 
   return (

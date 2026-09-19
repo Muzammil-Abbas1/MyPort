@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { scrollBehavior } from '@/lib/scroll';
 import { Button } from '@/components/ui/button';
 import { ChevronUp } from 'lucide-react';
 
@@ -15,7 +16,7 @@ const ScrollToTop = () => {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: scrollBehavior() });
   };
 
   return (

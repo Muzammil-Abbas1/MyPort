@@ -1,190 +1,233 @@
-import { useEffect, useRef, useState } from 'react';
-import SectionHeader from "@/components/SectionHeader";
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+import SectionHeader from '@/components/SectionHeader';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { useScrollStage } from '@/hooks/useScrollStage';
+import type { Fly } from '@/hooks/useScrollStage';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  Copy,
+  Check,
+  Github,
+  Linkedin,
+  MessageCircle,
+  ArrowUpRight,
+} from 'lucide-react';
+
+const EMAIL = '210muzammilabbas@gmail.com';
+const WHATSAPP = 'https://wa.me/923118911228';
+
+const contactInfo = [
+  { icon: Mail, label: 'Email', value: EMAIL, href: `mailto:${EMAIL}`, copy: true },
+  { icon: Phone, label: 'Phone / WhatsApp', value: '+92 311 8911228', href: 'tel:+923118911228' },
+  { icon: MapPin, label: 'Based in', value: 'Islamabad, Pakistan', href: undefined },
+];
+
+const socials = [
+  { label: 'GitHub', href: 'https://github.com/Muzammil-Abbas1', icon: <Github className="h-5 w-5" /> },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/muzammilabbass', icon: <Linkedin className="h-5 w-5" /> },
+  { label: 'WhatsApp', href: WHATSAPP, icon: <MessageCircle className="h-5 w-5" /> },
+  { label: 'Upwork', href: 'https://www.upwork.com/freelancers/~01d8a382d9eac1d30c', icon: <span className="text-base font-bold">U</span> },
+];
+
+const flies: Fly[] = [
+  { start: 0.0, end: 0.45, x: -200, z: -340, ry: 24 }, // contact info
+  { start: 0.12, end: 0.57, x: 200, z: -340, ry: -24 }, // form
+];
 
 const Contact = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
+  const { trackRef, ref, scrub, itemClass } = useScrollStage(flies);
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [opened, setOpened] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  // There is no mail server behind this form, so hand the message to the
+  // visitor's own email app (prefilled) rather than pretending it was sent.
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setFormData({ name: '', email: '', message: '' });
-      
-      setTimeout(() => setSubmitted(false), 3000);
-    }, 1500);
+    const subject = `Portfolio message from ${form.name}`;
+    const body = `${form.message}\n\n— ${form.name} (${form.email})`;
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setOpened(true);
+    setTimeout(() => setOpened(false), 6000);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* clipboard unavailable */
+    }
   };
-
-  const contactInfo = [
-    { icon: <Mail className="w-5 h-5" />, label: 'Email', value: '210muzammilabbas@gmail.com', href: 'mailto:210muzammilabbas@gmail.com' },
-    { icon: <Phone className="w-5 h-5" />, label: 'Phone', value: '+92 3118911228', href: 'tel:+923118911228' },
-    { icon: <MapPin className="w-5 h-5" />, label: 'Location', value: 'Islamabad, Pakistan', href: '#' },
-  ];
 
   return (
-    <section 
-      ref={sectionRef}
-      id="contact" 
-      className="py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-background overflow-x-clip"
-    >
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <SectionHeader
-          eyebrow="Contact"
-          title="Get In Touch"
-          subtitle="Let's build something amazing together"
-        />
+    <section id="contact" className="relative overflow-x-clip bg-background px-4 sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute bottom-[-10%] left-[-10%] h-[40%] w-[40%] rounded-full bg-cyan/10 blur-[120px]" />
+        <div className="absolute right-[-10%] top-[10%] h-[40%] w-[40%] rounded-full bg-purple/10 blur-[120px]" />
+      </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Contact Info */}
-          <div 
-            className={`space-y-6 transition-all duration-700 delay-200 ${
-              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-            }`}
-          >
-            <div className="bg-card border border-border rounded-xl p-6">
-              <h3 className="text-xl font-bold text-cyan mb-6">Contact Information</h3>
-              
-              <div className="space-y-4">
-                {contactInfo.map((item, index) => (
+      <div ref={trackRef} className={scrub ? 'h-[220svh]' : ''}>
+        <div
+          className={
+            scrub
+              ? 'sticky top-0 flex min-h-svh flex-col justify-center py-8'
+              : 'py-20 md:py-24'
+          }
+        >
+          <div className="relative mx-auto w-full max-w-5xl">
+            <SectionHeader
+              eyebrow="Contact"
+              title="Get In Touch"
+              subtitle={scrub ? undefined : "Let's build something amazing together"}
+              compact={scrub}
+            />
+
+            <div
+              className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2 lg:gap-6"
+              style={scrub ? { perspective: '1500px' } : undefined}
+            >
+              {/* Contact info */}
+              <div
+                ref={ref(0)}
+                className={`flex flex-col rounded-2xl border border-border bg-card p-5 shadow-xl sm:p-6 ${itemClass}`}
+              >
+                <h3 className="mb-4 text-xl font-bold text-cyan">Contact Information</h3>
+
+                <div className="space-y-2">
+                  {contactInfo.map(({ icon: Icon, label, value, href, copy }) => {
+                    const inner = (
+                      <>
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-cyan/10 text-cyan transition-colors group-hover:bg-cyan group-hover:text-background">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs text-muted-foreground">{label}</p>
+                          <p className="truncate text-sm font-medium text-foreground transition-colors group-hover:text-cyan sm:text-base">
+                            {value}
+                          </p>
+                        </div>
+                      </>
+                    );
+                    return (
+                      <div key={label} className="group flex items-center gap-1 rounded-xl p-2 transition-colors hover:bg-muted/50">
+                        {href ? (
+                          <a href={href} className="flex min-w-0 flex-1 items-center gap-4">
+                            {inner}
+                          </a>
+                        ) : (
+                          <div className="flex min-w-0 flex-1 items-center gap-4">{inner}</div>
+                        )}
+                        {copy && (
+                          <button
+                            type="button"
+                            onClick={copyEmail}
+                            aria-label={copied ? 'Email copied' : 'Copy email address'}
+                            className="shrink-0 rounded-lg p-2 text-muted-foreground transition hover:bg-white/10 hover:text-white"
+                          >
+                            {copied ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 flex items-center gap-2">
+                  {socials.map((s) => (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      title={s.label}
+                      className="flex h-11 flex-1 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/70 transition hover:-translate-y-0.5 hover:border-cyan/40 hover:bg-cyan/10 hover:text-cyan motion-reduce:transform-none"
+                    >
+                      {s.icon}
+                    </a>
+                  ))}
+                </div>
+
+                <div className="mt-auto pt-4">
                   <a
-                    key={item.label}
-                    href={item.href}
-                    className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted/50 transition-colors group"
-                    style={{ 
-                      opacity: isVisible ? 1 : 0,
-                      transform: isVisible ? 'translateX(0)' : 'translateX(-20px)',
-                      transition: `all 0.5s ease ${300 + index * 100}ms`
-                    }}
+                    href={WHATSAPP}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan to-purple text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98] motion-reduce:transform-none"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-cyan/10 flex items-center justify-center text-cyan group-hover:bg-cyan group-hover:text-background transition-colors">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">{item.label}</p>
-                      <p className="font-medium text-foreground group-hover:text-cyan transition-colors">{item.value}</p>
-                    </div>
+                    Hire Me for Freelance / Contract Work
+                    <ArrowUpRight className="h-4 w-4" />
                   </a>
-                ))}
+                </div>
               </div>
 
-              <Button 
-                className="w-full mt-6 bg-gradient-to-r from-cyan to-purple hover:opacity-90 text-white font-semibold"
-                onClick={() => window.open('https://wa.me/923118911228', '_blank')}
-                 >
-               Hire Me for Freelance/Contract Work
-                </Button>
-            </div>
-          </div>
+              {/* Message form */}
+              <div
+                ref={ref(1)}
+                style={{ '--d': '100ms' } as React.CSSProperties}
+                className={`flex flex-col rounded-2xl border border-border bg-card p-5 shadow-xl sm:p-6 ${itemClass}`}
+              >
+                <h3 className="mb-4 text-xl font-bold text-purple">Send a Message</h3>
 
-          {/* Contact Form */}
-          <div 
-            className={`transition-all duration-700 delay-300 ${
-              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
-            }`}
-          >
-            <div className="bg-card border border-border rounded-xl p-6">
-              <h3 className="text-xl font-bold text-purple mb-6">Send a Message</h3>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Input
-                    name="name"
-                    placeholder="Your Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="bg-background border-border focus:border-cyan focus:ring-cyan/20"
-                  />
-                </div>
-                
-                <div>
-                  <Input
-                    name="email"
-                    type="email"
-                    placeholder="Your Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="bg-background border-border focus:border-cyan focus:ring-cyan/20"
-                  />
-                </div>
-                
-                <div>
+                <form onSubmit={handleSubmit} className="flex flex-1 flex-col gap-3">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <Input
+                      name="name"
+                      placeholder="Your name"
+                      aria-label="Your name"
+                      value={form.name}
+                      onChange={handleChange}
+                      required
+                      className="border-border bg-background focus:border-cyan focus:ring-cyan/20"
+                    />
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Your email"
+                      aria-label="Your email"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                      className="border-border bg-background focus:border-cyan focus:ring-cyan/20"
+                    />
+                  </div>
+
                   <Textarea
                     name="message"
-                    placeholder="Your Message"
-                    value={formData.message}
+                    placeholder="How can I help you?"
+                    aria-label="Your message"
+                    value={form.message}
                     onChange={handleChange}
                     required
-                    rows={5}
-                    className="bg-background border-border focus:border-cyan focus:ring-cyan/20 resize-none"
+                    rows={4}
+                    className="min-h-[110px] flex-1 resize-none border-border bg-background focus:border-cyan focus:ring-cyan/20"
                   />
-                </div>
-                
-                <Button 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-purple to-cyan hover:opacity-90 text-white font-semibold"
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Sending...
-                    </span>
-                  ) : submitted ? (
-                    <span className="flex items-center gap-2">
-                      Message Sent!
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <Send className="w-4 h-4" />
-                      Send Message
-                    </span>
-                  )}
-                </Button>
-              </form>
+
+                  <button
+                    type="submit"
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple to-cyan text-sm font-semibold text-white transition hover:opacity-90 active:scale-[0.98] motion-reduce:transform-none"
+                  >
+                    <Send className="h-4 w-4" />
+                    {opened ? 'Opening your email app…' : 'Send Message'}
+                  </button>
+
+                  <p className="text-center text-xs text-muted-foreground" aria-live="polite">
+                    {opened
+                      ? "If nothing opened, email me directly or use WhatsApp."
+                      : 'Opens your email app with the message ready to send.'}
+                  </p>
+                </form>
+              </div>
             </div>
           </div>
         </div>

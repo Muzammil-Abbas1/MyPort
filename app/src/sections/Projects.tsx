@@ -95,6 +95,20 @@ const projects: Project[] = [
     github: "#",
   },
   {
+    id: "n8n-portfolio-assistant",
+    title: "AI Portfolio Assistant (n8n)",
+    tagline: "n8n workflow that answers visitor questions with AI, in real time",
+    problem:
+      "Visitors to a portfolio want quick answers about skills, projects and experience without waiting for an email reply",
+    solution:
+      "Built an n8n workflow that receives each question through a webhook, runs it through an AI model, and returns the answer to the chat widget on the site",
+    results:
+      "Real-time, always-on answers about his work; later upgraded into the secure Groq-powered API assistant used on this site today",
+    image: "/images/project-n8n-assistant.svg",
+    tech: ["n8n", "Agentic AI", "Webhooks", "REST API"],
+    github: "#",
+  },
+  {
     id: "web-scraper",
     title: "Smart Web Scraping Tool",
     tagline: "Automated scraping system for extracting structured data",
