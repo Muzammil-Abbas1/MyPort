@@ -131,7 +131,8 @@ const Chatbot = () => {
       {/* Floating Chat Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
+        aria-label={isOpen ? "Close chat" : "Open chat"}
+        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-lg transition-all duration-300 ${
           isOpen
             ? "bg-red-500 hover:bg-red-600 rotate-90"
             : "bg-gradient-to-r from-cyan to-purple hover:opacity-90 animate-pulse-glow"
@@ -147,7 +148,7 @@ const Chatbot = () => {
 
       {/* Chat Window - FIXED POSITIONING */}
       {isOpen && (
-        <div className="fixed bottom-20 right-6 z-50 w-80 sm:w-96 max-h-[70vh] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="fixed bottom-[4.5rem] right-4 sm:bottom-20 sm:right-6 z-50 w-[calc(100vw-2rem)] max-w-sm sm:w-96 max-h-[75dvh] sm:max-h-[70vh] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden flex flex-col">
           {/* Header */}
           <div className="bg-gradient-to-r from-cyan to-purple p-4 flex-shrink-0">
             <div className="flex items-center gap-3">

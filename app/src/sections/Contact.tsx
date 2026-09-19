@@ -64,7 +64,7 @@ const Contact = () => {
     <section 
       ref={sectionRef}
       id="contact" 
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-background"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-background overflow-x-clip"
     >
       <div className="max-w-5xl mx-auto">
         {/* Header */}

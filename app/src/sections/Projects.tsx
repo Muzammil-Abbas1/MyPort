@@ -138,7 +138,7 @@ const ProjectCard = ({
 
   return (
     <div
-      className={`min-w-[320px] md:min-w-[420px] snap-center transition-all duration-700 ${
+      className={`min-w-[85vw] sm:min-w-[340px] md:min-w-[420px] snap-center transition-all duration-700 ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
       style={{ transitionDelay: `${index * 120}ms` }}

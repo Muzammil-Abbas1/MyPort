@@ -283,12 +283,12 @@ const TechStack = () => {
                       <p className="mt-1 text-sm text-muted-foreground">{layer.blurb}</p>
                     </div>
 
-                    <ul className="m-0 flex list-none flex-wrap gap-3 p-0">
+                    <ul className="m-0 grid list-none grid-cols-3 gap-2.5 p-0 sm:flex sm:flex-wrap sm:gap-3">
                       {layer.items.map(({ name, Icon, color }) => (
                         <li
                           key={name}
                           title={name}
-                          className="ts-chip flex w-[5.5rem] flex-col items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-2 py-3.5"
+                          className="ts-chip flex w-full flex-col items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-2 py-3 sm:w-[5.5rem] sm:py-3.5"
                           style={{ '--c': color } as CSSProperties}
                         >
                           <Icon size={30} color={color} />

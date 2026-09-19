@@ -144,7 +144,7 @@ const AnimatedTitle = () => {
 
   return (
     <div className="relative">
-      <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight min-h-[1.2em] lg:whitespace-nowrap">
+      <h1 className="text-3xl min-[380px]:text-4xl min-[420px]:text-5xl sm:text-6xl md:text-7xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight min-h-[1.2em] lg:whitespace-nowrap">
         <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-300 bg-clip-text text-transparent">
           {text}
         </span>
@@ -304,8 +304,17 @@ const Hero = () => {
 
           {/* CENTER CONTENT */}
           <div className="lg:col-span-6 text-center">
+            {/* Compact profile photo for screens below lg */}
+            <div className="lg:hidden mx-auto mb-6 h-28 w-28 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 p-[3px] shadow-[0_0_30px_rgba(0,212,255,0.25)]">
+              <img
+                src={profileImg}
+                alt="Muzammil Abbas"
+                className="h-full w-full rounded-full border-2 border-black object-cover"
+              />
+            </div>
+
             {/* Available pill with animation */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-xs tracking-widest uppercase mb-8 animate-pulse">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/30 bg-cyan/10 text-cyan text-[10px] sm:text-xs tracking-widest uppercase mb-6 sm:mb-8 animate-pulse">
               <span className="h-2 w-2 rounded-full bg-cyan animate-ping" />
               Available for new projects
             </div>

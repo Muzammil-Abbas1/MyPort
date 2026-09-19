@@ -157,7 +157,7 @@ def get_user_status(user):
     <section
       ref={sectionRef}
       id="code-quality"
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-background"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-background overflow-x-clip"
     >
       <div className="max-w-4xl mx-auto">
         {/* Header */}

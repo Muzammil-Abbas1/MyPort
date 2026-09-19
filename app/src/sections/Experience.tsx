@@ -126,7 +126,7 @@ const RoleItem = ({
   return (
     <div
       ref={itemRef}
-      className="relative md:grid md:grid-cols-2 md:gap-16 pl-12 md:pl-0"
+      className="relative md:grid md:grid-cols-2 md:gap-16 pl-10 sm:pl-12 md:pl-0"
       style={{ '--accent': role.accent } as CSSProperties}
     >
       {/* Node on the roadmap line */}
@@ -166,7 +166,7 @@ const RoleItem = ({
           ref={cardRef}
           onMouseMove={handleMove}
           onMouseLeave={handleLeave}
-          className="exp-card group relative overflow-hidden rounded-2xl border border-white/10 bg-card/80 backdrop-blur-xl p-6 sm:p-8"
+          className="exp-card group relative overflow-hidden rounded-2xl border border-white/10 bg-card/80 backdrop-blur-xl p-5 sm:p-8"
           style={{
             transformStyle: 'preserve-3d',
             transition: reduced
@@ -191,7 +191,7 @@ const RoleItem = ({
           />
 
           <div className="relative" style={{ transform: 'translateZ(30px)' }}>
-            <div className="mb-5 flex items-start justify-between gap-4">
+            <div className="mb-5 flex flex-col-reverse items-start gap-3 sm:flex-row sm:justify-between sm:gap-4">
               <div>
                 <span
                   className="mb-2 inline-block font-mono text-xs tracking-[0.3em]"
