@@ -188,6 +188,7 @@ const CodeQuality = () => {
 
       a.style.transform = `translate3d(${swing.toFixed(1)}px, ${(LIFT * (1 - t)).toFixed(1)}px, ${(-DEPTH * (1 - t)).toFixed(1)}px)`;
       a.style.filter = `brightness(${(0.5 + 0.5 * t).toFixed(3)})`;
+      a.style.opacity = String(Math.min(1, t / 0.2));
       a.style.zIndex = t < 0.5 ? '1' : '2';
       a.style.pointerEvents = t < 0.5 ? 'none' : 'auto';
 
@@ -201,7 +202,7 @@ const CodeQuality = () => {
 
     if (reduced) {
       apply(1);
-      ['transform', 'filter', 'zIndex', 'pointerEvents'].forEach((p) => {
+      ['transform', 'filter', 'opacity', 'zIndex', 'pointerEvents'].forEach((p) => {
         if (beforeRef.current) beforeRef.current.style.removeProperty(p);
         if (afterRef.current) afterRef.current.style.removeProperty(p);
       });
@@ -242,7 +243,8 @@ const CodeQuality = () => {
         .cq-sticky { position: sticky; top: 4rem; min-height: calc(100svh - 4rem); display: flex; align-items: center; }
         .cq-cards { display: grid; perspective: 1600px; }
         .cq-cards > .cq-slot { grid-area: 1 / 1; }
-        .cq-card { will-change: transform, filter; }
+        .cq-card { position: relative; display: flex; flex-direction: column; height: 100%; will-change: transform, filter; }
+        .cq-card > .cq-code { flex: 1; }
         .cq-metric-arrow { color: color-mix(in srgb, #4ade80 calc(var(--t, 0) * 100%), #f87171); }
         .cq-metric-value { color: color-mix(in srgb, #4ade80 calc(var(--t, 0) * 100%), #f87171); }
         @media (max-height: 700px) { .cq-code { font-size: 11px; } }
