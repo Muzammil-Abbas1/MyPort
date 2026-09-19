@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import SectionHeader from "@/components/SectionHeader";
 import type { CSSProperties, ComponentType } from 'react';
 import {
   SiHtml5,
@@ -121,27 +122,10 @@ const BASE_TOP = 112;
 const STEP_TOP = 22;
 
 const TechStack = () => {
-  const sectionRef = useRef<HTMLElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const innerRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [seen, setSeen] = useState(false);
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
   const desktop = useMediaQuery('(min-width: 768px)');
-  const visible = seen || reduced;
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setSeen(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const inners = innerRefs.current;
@@ -199,9 +183,8 @@ const TechStack = () => {
 
   return (
     <section
-      ref={sectionRef}
       id="tech-stack"
-      className="relative overflow-clip bg-background px-4 py-20 sm:px-6 lg:px-8"
+      className="relative overflow-clip bg-background px-4 py-20 md:py-24 sm:px-6 lg:px-8"
     >
       <style>{`
         .ts-inner { transform-origin: top center; will-change: transform, filter; }
@@ -227,16 +210,11 @@ const TechStack = () => {
       </div>
 
       <div className="relative mx-auto max-w-5xl">
-        <div
-          className={`mb-14 text-center ${
-            reduced ? '' : 'transition-all duration-700'
-          } ${visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
-        >
-          <h2 className="mb-4 text-3xl font-bold text-gradient sm:text-4xl">Technology Stack</h2>
-          <p className="text-lg text-muted-foreground">
-            The full stack, layer by layer, from the interface to the AI
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="Architecture"
+          title="Technology Stack"
+          subtitle="The full stack, layer by layer, from the interface to the AI"
+        />
 
         <div>
           {layers.map((layer, i) => (

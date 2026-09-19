@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import SectionHeader from "@/components/SectionHeader";
 import type { CSSProperties, ComponentType } from 'react';
 import {
   SiHtml5,
@@ -102,7 +103,7 @@ const Skills = () => {
     <section
       ref={sectionRef}
       id="skills"
-      className="relative overflow-hidden py-20 bg-background"
+      className="relative overflow-hidden py-20 md:py-24 bg-background"
     >
       <style>{`
         @keyframes skills-scroll-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
@@ -124,16 +125,11 @@ const Skills = () => {
       `}</style>
 
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div
-          className={`mb-12 text-center transition-all duration-700 motion-reduce:transition-none ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          }`}
-        >
-          <h2 className="mb-4 text-3xl font-bold text-gradient sm:text-4xl">My Skills</h2>
-          <p className="text-lg text-muted-foreground">
-            Technologies I use to build full-stack and AI-powered products
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="Toolkit"
+          title="My Skills"
+          subtitle="Technologies I use to build full-stack and AI-powered products"
+        />
       </div>
 
       <div

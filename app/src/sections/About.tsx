@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import SectionHeader from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Briefcase } from "lucide-react";
 
@@ -25,7 +26,7 @@ const About = () => {
     <section
       ref={sectionRef}
       id="about"
-      className="relative py-20 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
+      className="relative py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
     >
       {/* Background Blobs */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
@@ -33,18 +34,9 @@ const About = () => {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple/10 rounded-full blur-[120px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto w-full">
+      <div className="max-w-6xl mx-auto w-full lg:px-6">
         {/* Header */}
-        <div
-          className={`text-center mb-14 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <h2 className="text-4xl md:text-5xl font-extrabold text-foreground">
-            About <span className="text-cyan">Me</span>
-          </h2>
-          <div className="h-1.5 w-20 bg-cyan mx-auto rounded-full mt-4" />
-        </div>
+        <SectionHeader eyebrow="Who I Am" title="About Me" />
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import SectionHeader from "@/components/SectionHeader";
 import type { KeyboardEvent, TouchEvent } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Github, Info } from "lucide-react";
 import {
@@ -233,18 +234,7 @@ const Projects = () => {
       </div>
 
       <div className="relative mx-auto w-full max-w-7xl">
-        <div
-          className={`mb-6 text-center sm:mb-8 ${
-            reduced ? "" : "transition-all duration-700"
-          } ${visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
-        >
-          <span className="mb-2 inline-block font-mono text-[11px] tracking-[0.35em] text-cyan">
-            SELECTED WORK
-          </span>
-          <h2 className="text-3xl font-extrabold text-white sm:text-4xl md:text-5xl">
-            My <span className="text-cyan">Projects</span>
-          </h2>
-        </div>
+        <SectionHeader eyebrow="Selected Work" title="My Projects" compact />
 
         {/* Carousel */}
         <div

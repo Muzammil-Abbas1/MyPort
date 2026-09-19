@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import SectionHeader from "@/components/SectionHeader";
 import type { CSSProperties, MouseEvent } from 'react';
 import { Brain, Code2, Server, Flag, Rocket } from 'lucide-react';
 
@@ -247,28 +248,11 @@ const RoleItem = ({
 };
 
 const Experience = () => {
-  const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [headerSeen, setHeaderSeen] = useState(false);
   const [progress, setProgress] = useState(0);
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
   const coarse = useMediaQuery('(pointer: coarse)');
   const noTilt = reduced || coarse;
-  const headerVisible = headerSeen || reduced;
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHeaderSeen(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -290,9 +274,8 @@ const Experience = () => {
 
   return (
     <section
-      ref={sectionRef}
       id="experience"
-      className="relative py-20 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
+      className="relative py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-background overflow-hidden"
     >
       <style>{`
         @keyframes exp-ping { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.9); opacity: 0; } }
@@ -308,16 +291,11 @@ const Experience = () => {
 
       <div className="relative mx-auto max-w-5xl">
         {/* Header */}
-        <div
-          className={`mb-14 text-center ${reduced ? '' : 'transition-all duration-700'} ${
-            headerVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          }`}
-        >
-          <h2 className="mb-4 text-3xl font-bold text-gradient sm:text-4xl">Career Roadmap</h2>
-          <p className="text-lg text-muted-foreground">
-            From machine learning to full-stack engineering
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="Career"
+          title="Career Roadmap"
+          subtitle="From machine learning to full-stack engineering"
+        />
 
         {/* Start marker */}
         <div className="relative mb-8 flex justify-start pl-1 md:justify-center md:pl-0">

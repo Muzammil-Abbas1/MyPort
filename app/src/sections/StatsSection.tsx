@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Code2, FolderGit2, Clock, FileCode, Sparkles, TrendingUp } from "lucide-react";
+import SectionHeader from "@/components/SectionHeader";
+import { Code2, FolderGit2, Clock, FileCode, Sparkles } from "lucide-react";
 
 interface StatItemProps {
   icon: React.ReactNode;
@@ -202,7 +203,7 @@ const StatsSection = () => {
     <section 
       ref={sectionRef}
       id="stats" 
-      className="relative py-24 bg-black overflow-hidden"
+      className="relative py-20 md:py-24 bg-black overflow-hidden"
     >
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none">
@@ -212,18 +213,11 @@ const StatsSection = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* Section header */}
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-6">
-            <TrendingUp className="w-4 h-4 text-cyan" />
-            <span className="text-xs text-white/60 uppercase tracking-widest">Track Record</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Numbers That <span className="text-cyan">Speak</span>
-          </h2>
-          <p className="text-white/50 max-w-xl mx-auto">
-            A snapshot of my journey in automation, development, and creating impactful solutions.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="Track Record"
+          title="Numbers That Speak"
+          subtitle="A snapshot of my journey in automation, development, and creating impactful solutions."
+        />
 
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

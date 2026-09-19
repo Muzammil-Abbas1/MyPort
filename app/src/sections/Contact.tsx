@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import SectionHeader from "@/components/SectionHeader";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -64,18 +65,15 @@ const Contact = () => {
     <section 
       ref={sectionRef}
       id="contact" 
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-background overflow-x-clip"
+      className="py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-background overflow-x-clip"
     >
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gradient mb-4">
-            Get In Touch
-          </h2>
-          <p className="text-muted-foreground text-lg">
-            Let's build something amazing together
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="Contact"
+          title="Get In Touch"
+          subtitle="Let's build something amazing together"
+        />
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
