@@ -11,9 +11,15 @@ import { inspectAttr } from 'kimi-plugin-inspect-react'
 const devApi = (mode: string): Plugin => ({
   name: "dev-api",
   configureServer(server) {
-    const env = loadEnv(mode, process.cwd(), "")
-    for (const [key, value] of Object.entries(env)) {
-      if (!(key in process.env)) process.env[key] = value
+    // Values that came from .env files are refreshed on every (re)load, but
+    // variables already set in the real environment are never overridden.
+    const g = globalThis as typeof globalThis & { __envFromFile?: Set<string> }
+    const fromFile = (g.__envFromFile ??= new Set<string>())
+    for (const [key, value] of Object.entries(loadEnv(mode, process.cwd(), ""))) {
+      if (!(key in process.env) || fromFile.has(key)) {
+        process.env[key] = value
+        fromFile.add(key)
+      }
     }
 
     server.middlewares.use("/api", async (req, res, next) => {

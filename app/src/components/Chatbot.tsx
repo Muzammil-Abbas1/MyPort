@@ -31,8 +31,19 @@ const FALLBACK_ERROR =
 const REQUEST_TIMEOUT_MS = 25000;
 const HISTORY_LIMIT = 10;
 
-/** Turns URLs and emails in a reply into safe clickable links (no HTML injection). */
-const renderWithLinks = (text: string) => {
+/** Renders **bold** and turns URLs/emails into safe clickable links (no HTML injection). */
+const renderWithLinks = (text: string) =>
+  text.split(/(\*\*[^*\n]+\*\*)/g).map((chunk, i) =>
+    i % 2 === 1 ? (
+      <strong key={i} className="font-semibold">
+        {chunk.slice(2, -2)}
+      </strong>
+    ) : (
+      <Fragment key={i}>{linkify(chunk)}</Fragment>
+    )
+  );
+
+const linkify = (text: string) => {
   const parts = text.split(/(https?:\/\/[^\s]+|[\w.+-]+@[\w-]+\.[\w.-]+)/g);
   return parts.map((part, i) => {
     if (i % 2 === 0) return <Fragment key={i}>{part}</Fragment>;
